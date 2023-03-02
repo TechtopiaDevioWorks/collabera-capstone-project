@@ -14,7 +14,7 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(25)]),
   })
   requestLoading = false;
-  loginError = 'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd';
+  loginError = '';
   constructor(private _user: UserService, private _router: Router) {
 
   }
@@ -30,14 +30,14 @@ export class LoginComponent {
         username: this.loginForm.get('username')?.value,
         password: this.loginForm.get('password')?.value
       }
-      /*if(user.username && user.password) {
+      if(user.username && user.password) {
         const loginStatus = await this._user.login(user.username, user.password)
-        if(loginStatus) {
+        if(loginStatus === true) {
           this._router.navigate(['/dashboard'], {queryParams: {loginSuccess: true}})
         } else {
           this.loginError = 'Login Failed! User or password is incorrect!'
         }
-      }*/
+      }
     }
     this.requestLoading = false;
   }

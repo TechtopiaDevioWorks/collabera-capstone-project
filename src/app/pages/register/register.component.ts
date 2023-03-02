@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NewUser } from '@core/interfaces/user';
 import { UserService } from '@core/services/user.service';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
 	registerForm = new FormGroup({
-		username: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]),
+		username: new FormControl<string>('', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]),
 		firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]),
 		lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]),
 		email: new FormControl('', [Validators.required, Validators.email]),
@@ -65,38 +66,29 @@ export class RegisterComponent implements OnInit, OnDestroy {
 		if (this.registerForm.valid) {
 			this.requestLoading = true;
 			this.registerError = '';
-			const user = {
+			const userForm = {
 				username: this.registerForm.get('username')?.value,
 				firstname: this.registerForm.get('firstName')?.value,
 				lastname: this.registerForm.get('lastName')?.value,
 				email: this.registerForm.get('email')?.value,
 				password: this.registerForm.get('password')?.value,
-				branch: this.registerForm.get('branch')?.value,
-				percentage: this.registerForm.get('percentage')?.value,
+        token: this.registerForm.get('token')?.value
 			};
 			if (
-				user.username &&
-				user.password &&
-				user.firstname &&
-				user.lastname &&
-				user.email &&
-				user.branch &&
-				user.percentage
+				userForm.username &&
+				userForm.password &&
+				userForm.firstname &&
+				userForm.lastname &&
+				userForm.email &&
+				userForm.token
 			) {
-				/*const loginStatus = await this._user.register(
-					user.username,
-					user.firstname,
-					user.lastname,
-					user.email,
-					user.password,
-					user.branch,
-					user.percentage
-				);
-				if (loginStatus) {
+        const newUser: NewUser = userForm as NewUser;
+				const registerStatus = await this._user.register(newUser);
+				if (registerStatus === true) {
 					this._router.navigate(['/login'], { queryParams: { registerSuccess: true } });
 				} else {
-					this.registerError = 'Register Failed! Try again!';
-				}*/
+					this.registerError = `Register Failed! ${registerStatus}`;
+				}
 			}
 		}
 		this.requestLoading = false;

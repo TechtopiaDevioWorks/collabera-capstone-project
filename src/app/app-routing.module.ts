@@ -15,6 +15,7 @@ const routes: Routes = [
       import('./pages/dashboard/dashboard.module').then(
         (m) => m.DashboardModule
       ),
+      canMatch: [LoggedinGuard]
   },
   {
     path: 'terms-conditions',
