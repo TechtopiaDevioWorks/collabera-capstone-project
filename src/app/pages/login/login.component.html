@@ -1,0 +1,103 @@
+<div class="container is-max-desktop m-auto p-2 login-page-container">
+  <div class="login-form-container">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onLoginSubmit()"
+      class="login-form"
+    >
+      <!--Username-->
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="JohnDoe02"
+            formControlName="username"
+            [class.is-danger]="
+              this.loginForm.get('username')?.errors &&
+              !this.loginForm.get('username')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.loginForm.get('username')?.pristine &&
+            this.loginForm.get('username')?.hasError('required')
+          "
+        >
+          Username is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.loginForm.get('username')?.pristine &&
+            (this.loginForm.get('username')?.hasError('maxlength') ||
+              this.loginForm.get('username')?.hasError('minlength'))
+          "
+        >
+          Username must be between 2 and 25 characters.
+        </p>
+      </div>
+      <!--Password-->
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input
+            class="input"
+            type="password"
+            placeholder="******"
+            formControlName="password"
+            [class.is-danger]="
+              this.loginForm.get('password')?.errors &&
+              !this.loginForm.get('password')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.loginForm.get('password')?.pristine &&
+            this.loginForm.get('password')?.hasError('required')
+          "
+        >
+          Password is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.loginForm.get('password')?.pristine &&
+            (this.loginForm.get('password')?.hasError('maxlength') ||
+              this.loginForm.get('password')?.hasError('minlength'))
+          "
+        >
+          Password must be between 6 and 25 characters.
+        </p>
+      </div>
+
+      <div class="field is-flex is-flex-direction-column">
+        <div class="control is-flex m-2">
+            <button
+            type="submit"
+            class="button is-primary m-auto"
+            [disabled]="!loginForm.valid"
+            [class.is-loading]="requestLoading"
+          >
+            Login
+          </button>
+          <button
+            type="submit"
+            class="button is-link m-auto"
+          routerLink="/register"
+          >
+            Register
+          </button>
+        </div>
+        <p class="help is-danger" *ngIf="loginError">
+          {{ loginError }}
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

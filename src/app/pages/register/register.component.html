@@ -1,0 +1,291 @@
+<div class="container is-max-desktop m-auto p-2 register-page-container">
+  <div class="register-form-container">
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onRegisterSubmit()"
+      class="register-form"
+    >
+      <!--Username-->
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="JohnDoe02"
+            formControlName="username"
+            [class.is-danger]="
+              this.registerForm.get('username')?.errors &&
+              !this.registerForm.get('username')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('username')?.pristine &&
+            this.registerForm.get('username')?.hasError('required')
+          "
+        >
+          Username is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('username')?.pristine &&
+            (this.registerForm.get('username')?.hasError('maxlength') ||
+              this.registerForm.get('username')?.hasError('minlength'))
+          "
+        >
+          Username must be between 2 and 25 characters.
+        </p>
+      </div>
+      <!--Firstname-->
+      <div class="field">
+        <label class="label">First name</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="John"
+            formControlName="firstName"
+            [class.is-danger]="
+              this.registerForm.get('firstName')?.errors &&
+              !this.registerForm.get('firstName')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('firstName')?.pristine &&
+            this.registerForm.get('firstName')?.hasError('required')
+          "
+        >
+          First name is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('firstName')?.pristine &&
+            (this.registerForm.get('firstName')?.hasError('maxlength') ||
+              this.registerForm.get('firstName')?.hasError('minlength'))
+          "
+        >
+          First name must be between 2 and 25 characters.
+        </p>
+      </div>
+      <!--Lastname-->
+      <div class="field">
+        <label class="label">Last name</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="Doe"
+            formControlName="lastName"
+            [class.is-danger]="
+              this.registerForm.get('lastName')?.errors &&
+              !this.registerForm.get('lastName')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('lastName')?.pristine &&
+            this.registerForm.get('lastName')?.hasError('required')
+          "
+        >
+          Last name is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('lastName')?.pristine &&
+            (this.registerForm.get('lastName')?.hasError('maxlength') ||
+              this.registerForm.get('lastName')?.hasError('minlength'))
+          "
+        >
+          Last name must be between 2 and 25 characters.
+        </p>
+      </div>
+      <!--Email-->
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="email"
+            placeholder="john.doe@company.com"
+            formControlName="email"
+            [class.is-danger]="
+              this.registerForm.get('email')?.errors &&
+              !this.registerForm.get('email')?.pristine
+            "
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i
+              class="fas fa-exclamation-triangle"
+              *ngIf="
+                this.registerForm.get('email')?.errors &&
+                !this.registerForm.get('email')?.pristine
+              "
+            ></i>
+          </span>
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('email')?.pristine &&
+            this.registerForm.get('email')?.hasError('required')
+          "
+        >
+          Email is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('email')?.pristine &&
+            this.registerForm.get('email')?.hasError('email')
+          "
+        >
+          Email is invalid.
+        </p>
+      </div>
+      <!--Password-->
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input
+            class="input"
+            type="password"
+            placeholder="******"
+            formControlName="password"
+            [class.is-danger]="
+              this.registerForm.get('password')?.errors &&
+              !this.registerForm.get('password')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('password')?.pristine &&
+            this.registerForm.get('password')?.hasError('required')
+          "
+        >
+          Password is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('password')?.pristine &&
+            (this.registerForm.get('password')?.hasError('maxlength') ||
+              this.registerForm.get('password')?.hasError('minlength'))
+          "
+        >
+          Password must be between 6 and 25 characters.
+        </p>
+      </div>
+      <!--Password Confirmation-->
+      <div class="field field-double-height">
+        <label class="label">Password Confirmation</label>
+        <div class="control">
+          <input
+            class="input"
+            type="password"
+            placeholder="******"
+            formControlName="passwordConfirmation"
+            [class.is-danger]="
+              this.registerForm.get('passwordConfirmation')?.errors &&
+              !this.registerForm.get('passwordConfirmation')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('passwordConfirmation')?.pristine &&
+            this.registerForm.get('passwordConfirmation')?.hasError('required')
+          "
+        >
+          Password confirmation is required.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('passwordConfirmation')?.pristine &&
+            (this.registerForm
+              .get('passwordConfirmation')
+              ?.hasError('maxlength') ||
+              this.registerForm
+                .get('passwordConfirmation')
+                ?.hasError('minlength'))
+          "
+        >
+          Password must be between 6 and 25 characters.
+        </p>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('passwordConfirmation')?.pristine &&
+            this.registerForm.get('passwordConfirmation')?.hasError('notSame')
+          "
+        >
+          Password confirmation does not match.
+        </p>
+      </div>
+      <!--Token-->
+      <div class="field">
+        <label class="label">Token</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="Token you've received from management"
+            formControlName="token"
+            [class.is-danger]="
+              this.registerForm.get('token')?.errors &&
+              !this.registerForm.get('token')?.pristine
+            "
+          />
+        </div>
+        <p
+          class="help is-danger"
+          *ngIf="
+            !this.registerForm.get('token')?.pristine &&
+            this.registerForm.get('token')?.hasError('required')
+          "
+        >
+          Token is required.
+        </p>
+      </div>
+      <div class="field is-grouped is-flex-direction-column">
+        <div class="control is-flex m-2">
+          <button
+            type="submit"
+            class="button is-primary m-auto"
+            [disabled]="!registerForm.valid"
+            [class.is-loading]="requestLoading"
+          >
+            Register
+          </button>
+          <button
+          type="submit"
+          class="button is-link m-auto"
+        routerLink="/login"
+        >
+          Login
+        </button>
+        </div>
+        <p class="help is-danger" *ngIf="registerError">
+          {{ registerError }}
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

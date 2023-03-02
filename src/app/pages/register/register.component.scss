@@ -1,0 +1,26 @@
+.register-form {
+    max-width: 350px;
+    margin: auto;
+    input {
+        width: 325px;
+    }
+    .field {
+        height: 90px;
+    }
+    .field-double-height {
+        height: 120px;
+    }
+}
+.register-form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-page-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 50vh;
+  }
+  

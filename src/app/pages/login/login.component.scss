@@ -1,0 +1,23 @@
+.login-form {
+    max-width: 350px;
+    margin: auto;
+    input {
+        width: 350px;
+    }
+    .field {
+        height: 90px;
+    }
+}
+.login-form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-page-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 50vh;
+  }
+  

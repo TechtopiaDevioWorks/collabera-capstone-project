@@ -1,0 +1,17 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	overflow: auto;
+	height: 100%;
+}
+
+.app-fixed-header {
+	position: fixed;
+	top: 0;
+	width: 100%;
+    z-index:9999;
+}
+.app-content-container {
+    padding-top: 52px;
+}

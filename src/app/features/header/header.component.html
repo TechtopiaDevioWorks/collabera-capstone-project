@@ -1,0 +1,50 @@
+<nav class="navbar app-header is-fixed-top" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" [routerLink]="['/dashboard']">
+			<img src="../../../assets/logo/logo.png" width="112" height="28" />
+		</a>
+		<a
+			role="button"
+			class="navbar-burger app-mobile-burger"
+			aria-label="menu"
+			aria-expanded="false"
+			(click)="toggleMobileNavigation()"
+			[class.is-active]="mobileState">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+	<div class="navbar-menu" [class.is-active]="mobileState">
+		<div class="navbar-start">
+			<a class="navbar-item is-tab" routerLink="/dashboard" routerLinkActive="is-active">
+				<span class="icon has-text-primary">
+					<i class="fa-solid fa-building-columns"></i>
+				</span>
+				<span>Dashboard</span>
+			</a>
+            <a class="navbar-item is-tab" routerLink="/colleges" routerLinkActive="is-active" [queryParams]="{user: 'true'}">
+				<span class="icon has-text-primary">
+					<i class="fa-solid fa-graduation-cap"></i>
+				</span>
+				<span>My colleges</span>
+			</a>
+
+            <a class="navbar-item is-tab" routerLink="/contact" routerLinkActive="is-active">
+				<span class="icon has-text-primary">
+					<i class="fa-solid fa-address-book"></i>
+				</span>
+				<span>Contact</span>
+			</a>
+            <a class="navbar-item is-tab" routerLink="/about" routerLinkActive="is-active">
+				<span class="icon has-text-primary">
+					<i class="fa-solid fa-address-card"></i>
+				</span>
+				<span>About</span>
+			</a>
+		</div>
+		<div class="navbar-end">
+			<app-header-profile></app-header-profile>
+		</div>
+	</div>
+</nav>

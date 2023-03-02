@@ -1,0 +1,5 @@
+<app-header class="app-fixed-header" *ngIf="headerVisible"></app-header>
+<div [class.app-content-container]="headerVisible">
+<ng-content></ng-content>
+</div>
+<app-footer></app-footer>
