@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MinTraining, Training } from '@core/interfaces/training';
 import * as moment from 'moment';
 
@@ -9,8 +9,13 @@ import * as moment from 'moment';
 })
 export class TrainingCardComponent implements OnInit{
   @Input() training: Training | MinTraining | null = null;
+  @Input() userRoleId: number|null = null;
   imgUrl = 'https://bulma.io/images/placeholders/1280x960.png';
   expired = false;
+  @Output() applyTraining: EventEmitter<number> = new EventEmitter()
+  @Output() editTraining: EventEmitter<number> = new EventEmitter()
+  @Output() deleteTraining: EventEmitter<number> = new EventEmitter()
+  @Output() infoTraining: EventEmitter<number> = new EventEmitter()
   constructor() {
 
   }

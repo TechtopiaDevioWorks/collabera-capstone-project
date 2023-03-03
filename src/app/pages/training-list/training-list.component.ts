@@ -19,16 +19,17 @@ export class TrainingListComponent implements OnInit {
   pageSize = 10;
   pageNumber = 0;
   trainingListLength = 0;
-  userRole: number|null = null;
+  userRoleId: number | null = null;
   constructor(private _user: UserService, private _training: TrainingService) {}
 
   ngOnInit(): void {
-   this.initTrainings();
+    this.initTrainings();
   }
 
   async initTrainings() {
-	this.userRole = await this._user.getUserRole();
-	this.onFilterChange(this.filterInfo);
+    const userRole = await this._user.getUserRole();
+    this.userRoleId = userRole ? userRole.id : null;
+    this.onFilterChange(this.filterInfo);
   }
 
   async onFilterChange(newFilter: TrainingFilter) {

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { NewUser, User } from '@core/interfaces/user';
+import { NewUser, Role, User } from '@core/interfaces/user';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -17,10 +17,10 @@ export class UserService {
     return this._user;
   }
 
-  async getUserRole(): Promise<number | null> {
+  async getUserRole(): Promise<Role | null> {
     await this.init();
     if (!this._user) return null;
-    return this._user.role.id;
+    return this._user.role;
   }
 
   async getLoginStatus(): Promise<boolean> {
@@ -72,8 +72,8 @@ export class UserService {
         token: 'randomtoken',
         email: 'amanea@techtopia.ro',
         role: {
-          id: 3,
-          name: 'HR',
+          id: 1,
+          name: 'Employee',
         },
       };
       if (userToken !== 'randomtoken') {

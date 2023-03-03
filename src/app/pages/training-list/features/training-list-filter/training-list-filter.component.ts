@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./training-list-filter.component.scss']
 })
 export class TrainingListFilterComponent {
-  @Input() userRole: number|null = null;
+  @Input() userRoleId: number|null = null;
   filterForm = new FormGroup({
     interval: new FormGroup({
       minDate: new FormControl<moment.Moment|null>(null),
@@ -28,14 +28,10 @@ export class TrainingListFilterComponent {
     maxDate: null,
     applicants: null
   }
-  isUserManagement = false;
   @Output() filterOut: EventEmitter<TrainingFilter> = new EventEmitter();
 	constructor(private _training: TrainingService, private _user: UserService) {}
 
 	ngOnInit(): void {
-    this._user.getUserRole().then((userRole) => {
-      if(userRole === 2 || userRole === 3) this.isUserManagement = true;
-    });
     this.formSubscription = this.filterForm.valueChanges.subscribe((newValues) => {
       this.filterData.minDate = newValues.interval?.minDate;
       this.filterData.maxDate = newValues.interval?.maxDate;

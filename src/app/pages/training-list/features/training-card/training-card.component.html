@@ -1,5 +1,6 @@
 <div class="card" *ngIf="training" [class.training-expired]="expired">
   <span title="Badge top center" class="badge is-top is-warning" *ngIf="expired">Training expired</span>
+  <span title="Badge top center" class="badge badge-big is-top is-primary" *ngIf="userRoleId === 1 && training.state && !expired">{{training.state | titlecase}}</span>
     <div class="card-content">
       <div class="media">
         <div class="media-content">
@@ -24,6 +25,18 @@
       </div>
     </div>
     <footer class="card-footer">
-      <a class="card-footer-item">Apply</a>
+      <ng-container [ngSwitch]="userRoleId">
+        <ng-container *ngSwitchCase="1">
+          <a class="card-footer-item" (click)="applyTraining.next(training.id)">Apply</a>
+        </ng-container>
+        <ng-container *ngSwitchCase="2">
+          <a class="card-footer-item" (click)="infoTraining.next(training.id)">Applicants</a>
+        </ng-container>
+        <ng-container *ngSwitchCase="3">
+          <a class="card-footer-item" (click)="infoTraining.next(training.id)">Info</a>
+          <a class="card-footer-item" (click)="editTraining.next(training.id)">Edit</a>
+          <a class="card-footer-item" (click)="deleteTraining.next(training.id)">Delete</a>
+        </ng-container>
+      </ng-container>
     </footer>
 </div>

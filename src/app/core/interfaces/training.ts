@@ -1,26 +1,34 @@
-import { Moment } from "moment";
-import { MinUser } from "./user";
+import { Moment } from 'moment';
+import { MinUser } from './user';
 
 export interface MinTraining {
-    title: string;
-    description: string;
-    startDate: Moment;
-    endDate: Moment;
-    duration: number;
+  id: number;
+  title: string;
+  description: string;
+  startDate: Moment;
+  endDate: Moment;
+  duration: number;
+  state?:
+    | 'applied'
+    | 'approved'
+    | 'rejected'
+    | 'canceled'
+    | 'cancel-pending'
+    | null;
 }
 
 export interface Training extends MinTraining {
-    applicants: TrainingApplicant[];
+  applicants: TrainingApplicant[];
 }
 
 export interface TrainingApplicant {
-    user: MinUser;
-    state: 'applied'|'approved'|'rejected'|'canceled'|'cancel-pending';
+  user: MinUser;
+  state: 'applied' | 'approved' | 'rejected' | 'canceled' | 'cancel-pending';
 }
 
 export interface TrainingFilter {
-    minDate?: Moment|null;
-    maxDate?: Moment|null;
-    applicants?: true|null;
-    [key: string]: any;
+  minDate?: Moment | null;
+  maxDate?: Moment | null;
+  applicants?: true | null;
+  [key: string]: any;
 }

@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { MinTraining, Training, TrainingFilter } from '@core/interfaces/training';
+import {
+  MinTraining,
+  Training,
+  TrainingFilter,
+} from '@core/interfaces/training';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { UserService } from './user.service';
@@ -10,6 +14,7 @@ import { UserService } from './user.service';
 export class TrainingService {
   dummyTrainingList: Training[] = [
     {
+      id: 0,
       title: 'Introduction to JavaScript',
       description: 'Learn the basics of JavaScript programming language.',
       startDate: moment('2023-05-01T10:00:00Z'),
@@ -18,6 +23,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 1,
       title: 'Advanced React Techniques',
       description: 'Learn advanced techniques for building React applications.',
       startDate: moment('2023-06-01T09:00:00Z'),
@@ -26,6 +32,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 2,
       title: 'Machine Learning Fundamentals',
       description:
         'Learn the basics of machine learning and how to apply it to real-world problems.',
@@ -35,6 +42,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 3,
       title: 'Python for Data Science',
       description: 'Learn how to use Python to analyze and visualize data.',
       startDate: moment('2023-08-01T09:00:00Z'),
@@ -43,6 +51,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 4,
       title: 'Web Development with Node.js',
       description:
         'Learn how to build web applications using Node.js and related technologies.',
@@ -52,6 +61,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 5,
       title: 'Introduction to Cloud Computing',
       description:
         'Learn the basics of cloud computing and how to use cloud services like AWS and Azure.',
@@ -61,6 +71,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 6,
       title: 'Android App Development',
       description:
         'Learn how to develop Android apps using Java and Android Studio.',
@@ -70,6 +81,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 7,
       title: 'Agile Project Management',
       description:
         'Learn the basics of agile project management and how to use agile methodologies like Scrum and Kanban.',
@@ -79,6 +91,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 8,
       title: 'Data Structures and Algorithms',
       description:
         'Learn about fundamental data structures and algorithms used in computer science.',
@@ -88,6 +101,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 9,
       title: 'GraphQL for Modern Web Development',
       description: 'Learn how to use GraphQL to build modern, scalable APIs.',
       startDate: moment('2023-02-01T11:00:00Z'),
@@ -96,6 +110,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 10,
       title: 'Deep Learning with TensorFlow',
       description:
         'Learn how to use TensorFlow to build deep learning models for image classification and natural language processing.',
@@ -105,6 +120,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 11,
       title: 'DevOps Fundamentals',
       description:
         'Learn the basics of DevOps and how to implement continuous integration and deployment pipelines.',
@@ -114,6 +130,7 @@ export class TrainingService {
       applicants: [],
     },
     {
+      id: 12,
       title: 'Building Scalable Microservices',
       description:
         'Learn how to design and build microservices-based applications that can scale to meet high demand.',
@@ -124,30 +141,33 @@ export class TrainingService {
     },
   ];
 
-  private latestTrainingFilteredList: Training[]|MinTraining[] = [];
-	private latestTrainingFilter: string | null = null;
+  private latestTrainingFilteredList: Training[] | MinTraining[] = [];
+  private latestTrainingFilter: string | null = null;
 
   constructor(private _user: UserService) {
-    const currentMoment = moment.utc()
-    this.dummyTrainingList.sort((a,b) => {
-      if(a.endDate.isAfter(currentMoment)&& b.endDate.isAfter(currentMoment)) {
-        if(a.startDate.isAfter(b.startDate)) {
-          return 1
+    const currentMoment = moment.utc();
+    this.dummyTrainingList.sort((a, b) => {
+      if (
+        a.endDate.isAfter(currentMoment) &&
+        b.endDate.isAfter(currentMoment)
+      ) {
+        if (a.startDate.isAfter(b.startDate)) {
+          return 1;
         } else {
-          return -1
+          return -1;
         }
-      } else if(a.endDate.isAfter(currentMoment)) {
-        return -1
-      } else if(b.endDate.isAfter(currentMoment)) {
-        return 1
+      } else if (a.endDate.isAfter(currentMoment)) {
+        return -1;
+      } else if (b.endDate.isAfter(currentMoment)) {
+        return 1;
       } else {
-        if(a.startDate.isAfter(b.startDate)) {
-          return 1
+        if (a.startDate.isAfter(b.startDate)) {
+          return 1;
         } else {
-          return -1
+          return -1;
         }
       }
-    })
+    });
   }
 
   async getTrainingList(
@@ -156,79 +176,85 @@ export class TrainingService {
     applicants: true | null = null,
     results: number = 10,
     page: number = 0
-  ): Promise<MinTraining[]|Training[]> {
-    const filter: TrainingFilter = {
-    };
+  ): Promise<MinTraining[] | Training[]> {
+    const filter: TrainingFilter = {};
     const userRole = await this._user.getUserRole();
-    if(minDate) filter.minDate = minDate;
-    if(maxDate) filter.maxDate = maxDate;
-    if(applicants) filter.applicants = applicants;
-    if (this.latestTrainingFilter === JSON.stringify(filter) && this.latestTrainingFilteredList && this.latestTrainingFilteredList.length > 0) {
-		} else {
-			const filteredList = this.dummyTrainingList.filter((training) => {
-				return Object.keys(filter).every((key) => {
-          if(filter[key] === null) return true;
-					if (key === 'minDate') {
-						return training.startDate.isAfter(filter.minDate);
-					} else if (key === 'maxDate') {
-						return training.endDate.isBefore(filter.maxDate);
-					} else if (key==='applicants'){
-            return training?.applicants?.length > 0
-          }
-          else return true;
-				});
-			});
-      if(userRole === 1) {
-        this.latestTrainingFilteredList = filteredList.map(e => {
+    const userRoleId = userRole ? userRole.id : null;
+    if (minDate) filter.minDate = minDate;
+    if (maxDate) filter.maxDate = maxDate;
+    if (applicants) filter.applicants = applicants;
+    if (
+      this.latestTrainingFilter === JSON.stringify(filter) &&
+      this.latestTrainingFilteredList &&
+      this.latestTrainingFilteredList.length > 0
+    ) {
+    } else {
+      const filteredList = this.dummyTrainingList.filter((training) => {
+        return Object.keys(filter).every((key) => {
+          if (filter[key] === null) return true;
+          if (key === 'minDate') {
+            return training.startDate.isAfter(filter.minDate);
+          } else if (key === 'maxDate') {
+            return training.endDate.isBefore(filter.maxDate);
+          } else if (key === 'applicants') {
+            return training?.applicants?.length > 0;
+          } else return true;
+        });
+      });
+      if (userRoleId === 1) {
+        this.latestTrainingFilteredList = filteredList.map((e) => {
           const eNew: MinTraining = e;
           return eNew;
-        })
+        });
       } else {
         this.latestTrainingFilteredList = filteredList;
       }
-			this.latestTrainingFilter = JSON.stringify(filter);
-		}
-		const start = page * results;
-		const end = start + results;
+      this.latestTrainingFilter = JSON.stringify(filter);
+    }
+    const start = page * results;
+    const end = start + results;
     return this.latestTrainingFilteredList.slice(start, end);
   }
 
   async getTrainingListLength(
     minDate: Moment | null = null,
     maxDate: Moment | null = null,
-    applicants: true | null = null,
+    applicants: true | null = null
   ): Promise<number> {
-    const filter: TrainingFilter = {
-    };
+    const filter: TrainingFilter = {};
     const userRole = await this._user.getUserRole();
-    if(minDate) filter.minDate = minDate;
-    if(maxDate) filter.maxDate = maxDate;
-    if(applicants) filter.applicants = applicants;
-    if (this.latestTrainingFilter === JSON.stringify(filter) && this.latestTrainingFilteredList && this.latestTrainingFilteredList.length > 0) {
-		} else {
-			const filteredList = this.dummyTrainingList.filter((training) => {
-				return Object.keys(filter).every((key) => {
-          if(filter[key] === null) return true;
-					if (key === 'minDate') {
-						return training.startDate.isAfter(filter.minDate);
-					} else if (key === 'maxDate') {
-						return training.endDate.isBefore(filter.maxDate);
-					} else if (key==='applicants'){
-            return training?.applicants?.length > 0
-          }
-          else return true;
-				});
-			});
-      if(userRole === 1) {
-        this.latestTrainingFilteredList = filteredList.map(e => {
+    const userRoleId = userRole ? userRole.id : null;
+    if (minDate) filter.minDate = minDate;
+    if (maxDate) filter.maxDate = maxDate;
+    if (applicants) filter.applicants = applicants;
+    if (
+      this.latestTrainingFilter === JSON.stringify(filter) &&
+      this.latestTrainingFilteredList &&
+      this.latestTrainingFilteredList.length > 0
+    ) {
+    } else {
+      const filteredList = this.dummyTrainingList.filter((training) => {
+        return Object.keys(filter).every((key) => {
+          if (filter[key] === null) return true;
+          if (key === 'minDate') {
+            return training.startDate.isAfter(filter.minDate);
+          } else if (key === 'maxDate') {
+            return training.endDate.isBefore(filter.maxDate);
+          } else if (key === 'applicants') {
+            return training?.applicants?.length > 0;
+          } else return true;
+        });
+      });
+      if (userRoleId === 1) {
+        this.latestTrainingFilteredList = filteredList.map((e) => {
           const eNew: MinTraining = e;
           return eNew;
-        })
+        });
       } else {
         this.latestTrainingFilteredList = filteredList;
       }
-			this.latestTrainingFilter = JSON.stringify(filter);
-		}
+      this.latestTrainingFilter = JSON.stringify(filter);
+    }
     return this.latestTrainingFilteredList.length;
   }
 }

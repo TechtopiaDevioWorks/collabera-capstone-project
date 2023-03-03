@@ -1,6 +1,6 @@
 <div class="container is-fluid is-flex is-flex-direction-column">
 	<section class="section">
-		<app-training-list-filter (filterOut)="onFilterChange($event)" [userRole]="userRole"></app-training-list-filter>
+		<app-training-list-filter (filterOut)="onFilterChange($event)" [userRoleId]="userRoleId"></app-training-list-filter>
 	</section>
 	<mat-paginator
 		[length]="trainingListLength"
@@ -10,6 +10,6 @@
 		aria-label="Select page">
 	</mat-paginator>
 	<div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around">
-		<app-training-card *ngFor="let item of trainingList" [training]="item"></app-training-card>
+		<app-training-card *ngFor="let item of trainingList" [training]="item" [userRoleId]="userRoleId"></app-training-card>
 	</div>
 </div>
