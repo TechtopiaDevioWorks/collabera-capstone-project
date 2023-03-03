@@ -1,9 +1,23 @@
-<div class="navbar-item has-dropdown is-hoverable">
-    <a class="navbar-link is-arrowless mobile-hidden"><i class="fa-solid fa-user"></i></a>
+<div class="navbar-item has-dropdown h-100" [class.is-active]="dropdownOpened">
+  <a
+    class="navbar-link is-arrowless mobile-hidden"
+    (click)="dropdownOpened = !dropdownOpened"
+    ><i class="fa-solid fa-user"></i
+  ></a>
 
-    <div class="navbar-dropdown is-right">
-    <a class="navbar-item" routerLink="/profile" routerLinkActive="is-active">Username</a>
-    <hr class="navbar-divider">
-    <a class="navbar-item" (click)="onLogoutClick()">Logout</a>
-    </div>
+  <div class="navbar-dropdown is-right">
+    <ng-container *ngIf="currentUser">
+        <div class="navbar-item">Logged in as</div>
+        <div class="navbar-item username-container">{{currentUser.username}}</div>
+        <hr class="navbar-divider" />
+        <a class="navbar-item" routerLink="/profile" routerLinkActive="is-active">Your profile</a>
+        <hr class="navbar-divider" />
+        <a class="navbar-item" (click)="onLogoutClick()">Logout</a>
+    </ng-container>
+    <ng-container *ngIf="!currentUser">
+        <div class="navbar-item">Not logged in</div>
+        <hr class="navbar-divider" />
+        <a class="navbar-item" (click)="onLogoutClick()">Login</a>
+    </ng-container>
+  </div>
 </div>

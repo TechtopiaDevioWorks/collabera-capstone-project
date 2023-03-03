@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrainingFilter } from '@core/interfaces/training';
 import { TrainingService } from '@core/services/training.service';
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./training-list-filter.component.scss']
 })
 export class TrainingListFilterComponent {
+  @Input() userRole: number|null = null;
   filterForm = new FormGroup({
     interval: new FormGroup({
       minDate: new FormControl<moment.Moment|null>(null),

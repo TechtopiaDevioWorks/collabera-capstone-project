@@ -1,6 +1,7 @@
 @import 'ngx-toastr/toastr';
 @import '@creativebulma/bulma-badge/dist/bulma-badge.min.css';
-
+@import 'bulma-switch/dist/css/bulma-switch.min.css';
+@import '@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css';
 html,
 body {
 	height: 100%;
@@ -17,6 +18,10 @@ p {
     .is-fluid {
         padding: 0 !important;
     }
+}
+
+.h-100 {
+    height: 100%;
 }
 
 .w-50 {

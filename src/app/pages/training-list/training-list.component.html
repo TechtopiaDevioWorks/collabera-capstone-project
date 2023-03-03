@@ -1,6 +1,6 @@
 <div class="container is-fluid is-flex is-flex-direction-column">
 	<section class="section">
-		<app-training-list-filter (filterOut)="onFilterChange($event)"></app-training-list-filter>
+		<app-training-list-filter (filterOut)="onFilterChange($event)" [userRole]="userRole"></app-training-list-filter>
 	</section>
 	<mat-paginator
 		[length]="trainingListLength"
