@@ -1,4 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+@import '@creativebulma/bulma-badge/dist/bulma-badge.min.css';
+
 html,
 body {
 	height: 100%;
@@ -15,4 +17,8 @@ p {
     .is-fluid {
         padding: 0 !important;
     }
+}
+
+.w-50 {
+    width: 50%;
 }

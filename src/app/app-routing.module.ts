@@ -25,6 +25,12 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'trainings',
+    loadChildren: () =>
+      import('./pages/training-list/training-list.module').then((m) => m.TrainingListModule),
+    canMatch: [LoggedinGuard],
+  },
+  {
     path: 'profile',
     loadChildren: () =>
       import('./pages/profile/profile.module').then((m) => m.ProfileModule),

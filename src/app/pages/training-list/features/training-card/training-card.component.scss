@@ -1,0 +1,24 @@
+:host {
+    padding: 15px;
+}
+.card {
+    width: 300px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+}
+.card-footer {
+    margin-top: auto;
+}
+
+.training-expired {
+    .card-content {
+        opacity: 0.25;
+    }
+    .card-footer {
+        pointer-events: none;
+        opacity: 0.25;
+    }
+    cursor:not-allowed;
+}

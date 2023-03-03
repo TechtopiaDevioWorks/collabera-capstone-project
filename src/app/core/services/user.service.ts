@@ -10,11 +10,29 @@ import { BehaviorSubject } from 'rxjs';
 export class UserService {
   private _user: User | null = null;
   loginStatus: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
+  initialized = false;
   constructor(private _router: Router) {}
 
   getUserInfo(): User | null {
     return this._user;
+  }
+
+  async getUserRole(): Promise<number | null> {
+    await this.init();
+    if (!this._user) return null;
+    return this._user.role.id;
+  }
+
+  async getLoginStatus(): Promise<boolean> {
+    await this.init();
+    return this.loginStatus.getValue();
+  }
+
+  async init() {
+    if (this.initialized === false) {
+      await this.checkUser();
+      this.initialized = true;
+    }
   }
 
   async checkUser(): Promise<boolean | string> {
@@ -30,15 +48,15 @@ export class UserService {
             this.loginStatus.next(true);
             return true;
           } else {
-            this.logout();
+            this.logout(null);
             return tokenRes;
           }
         } else {
-          this.logout();
+          this.logout(null);
           return false;
         }
       } else {
-        this.logout();
+        this.logout(null);
         return false;
       }
     }
@@ -63,7 +81,6 @@ export class UserService {
       }
       if (res) {
         this._user = res;
-        this.loginStatus.next(true);
         return true;
       }
       return 'Unexpected error occured. Try again!';
@@ -72,13 +89,21 @@ export class UserService {
     }
   }
 
-  logout() {
+  logout(message: 'logout' | null) {
     if (localStorage) {
       localStorage.removeItem('userToken');
     }
     this._user = null;
     this.loginStatus.next(false);
-    this._router.navigate(['/login'], { queryParams: { logout: true } });
+    let queryParameters = {};
+    switch (message) {
+      case 'logout':
+        queryParameters = {
+          logout: true,
+        };
+        break;
+    }
+    this._router.navigate(['/login'], { queryParams: queryParameters });
   }
 
   saveUserLocal() {
@@ -108,6 +133,7 @@ export class UserService {
       if (res) {
         this._user = res;
         this.loginStatus.next(true);
+        this.saveUserLocal();
         return true;
       }
       return 'Unexpected error occured. Try again!';

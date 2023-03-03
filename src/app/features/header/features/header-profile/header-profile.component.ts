@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserService } from '@core/services/user.service';
 
 @Component({
   selector: 'app-header-profile',
@@ -6,7 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./header-profile.component.scss']
 })
 export class HeaderProfileComponent {
-	onLogoutClick() {
 
+  constructor(private _user: UserService) {}
+
+	onLogoutClick() {
+    this._user.logout('logout');
 	}
 }

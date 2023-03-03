@@ -7,15 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class LoggedinGuard implements CanMatch {
   constructor(private _user: UserService, private _router: Router) {}
-  canMatch(
+  async canMatch(
     route: Route,
     segments: UrlSegment[]
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    const status = this._user.loginStatus.value;
+  ): Promise<boolean | UrlTree> {
+    const status = await this._user.getLoginStatus();
     if (status) {
       return true;
     } else {

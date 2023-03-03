@@ -1,0 +1,29 @@
+<div class="card" *ngIf="training" [class.training-expired]="expired">
+  <span title="Badge top center" class="badge is-top is-warning" *ngIf="expired">Training expired</span>
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-6">{{training.title}}</p>
+          <div class="is-flex">
+            <div class="w-50">
+              <p class="subtitle is-6 m-0">Starts on:</p>
+              <p class="subtitle is-6 m-0">Ends on:</p>
+              <p class="subtitle is-6 m-0">Requires:</p>
+            </div>
+            <div class="w-50 has-text-centered">
+              <p class="subtitle is-6 m-0"><strong>{{training.startDate | moment}}</strong></p>
+              <p class="subtitle is-6 m-0"><strong>{{training.endDate | moment}}</strong></p>
+              <p class="subtitle is-6 m-0"><strong>{{training.duration}} hours</strong></p>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+      <div class="content">
+        <p class="subtitle is-6">{{training.description}}</p>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <a class="card-footer-item">Apply</a>
+    </footer>
+</div>

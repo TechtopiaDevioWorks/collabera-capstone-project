@@ -1,0 +1,35 @@
+<div class="container is-flex is-flex-direction-row is-flex-wrap-wrap">
+    <form [formGroup]="filterForm" class="container is-flex is-flex-direction-column is-flex-wrap-wrap">
+        <!--Interval-->
+		<div class="field m-2">
+			<label class="label">Date range</label>
+			<div class="control has-icons-left">
+                <mat-date-range-input class="input"
+                    formGroupName="interval"
+                    [rangePicker]="intervalPicker">
+                <input matStartDate placeholder="Start date after" formControlName="minDate">
+                <input matEndDate placeholder="End date before" formControlName="maxDate">
+              </mat-date-range-input>
+              <span class="icon is-small is-left">
+                 <mat-datepicker-toggle matIconSuffix [for]="intervalPicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #intervalPicker></mat-date-range-picker>
+              </span>
+			</div>
+		</div>
+        <!--Branch-->
+        <div class="field m-2">
+            <div class="control">
+                <label class="label">
+                    Applicants
+                </label>
+                <div class="contol">
+                    <input
+                        type="checkbox"
+                        formControlName="applicants"
+                        />
+                    Show only trainings with applicants
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
