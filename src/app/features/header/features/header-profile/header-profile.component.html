@@ -10,6 +10,7 @@
         <div class="navbar-item">Logged in as</div>
         <div class="navbar-item username-container">{{currentUser.username}}</div>
         <div class="navbar-item">Role: <strong class="ml-1">{{currentUser.role.name}}</strong></div>
+        <div class="navbar-item" *ngIf="currentUser.team">Team: <strong class="ml-1">{{currentUser.team.name}}</strong></div>
         <hr class="navbar-divider" />
         <a class="navbar-item" routerLink="/profile" routerLinkActive="is-active">Your profile</a>
         <hr class="navbar-divider" />

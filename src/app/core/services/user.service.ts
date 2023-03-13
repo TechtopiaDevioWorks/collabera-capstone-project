@@ -1,8 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NewUser, Role, User } from '@core/interfaces/user';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class UserService {
   private _user: User | null = null;
   loginStatus: BehaviorSubject<boolean> = new BehaviorSubject(false);
   initialized = false;
-  constructor(private _router: Router) {}
+  constructor(private _router: Router, private _http: HttpClient) {}
 
   getUserInfo(): User | null {
     return this._user;
@@ -65,20 +66,9 @@ export class UserService {
   private async checkUserToken(userToken: string): Promise<true | string> {
     try {
       await this.delay(1000);
-      let res: User | null = {
-        firstname: 'Alin',
-        lastname: 'Manea',
-        username: 'amanea',
-        token: 'randomtoken',
-        email: 'amanea@techtopia.ro',
-        role: {
-          id: 1,
-          name: 'Employee',
-        },
-      };
-      if (userToken !== 'randomtoken') {
-        res = null;
-      }
+      const res = await firstValueFrom(
+				this._http.put<User>(environment.apiUrl + `/token-login`, {token: userToken})
+			);
       if (res) {
         this._user = res;
         return true;
@@ -115,21 +105,9 @@ export class UserService {
 
   async login(username: string, password: string): Promise<boolean | string> {
     try {
-      await this.delay(1000);
-      let res: User | null = {
-        firstname: 'Alin',
-        lastname: 'Manea',
-        username: 'amanea',
-        token: 'randomtoken',
-        email: 'amanea@techtopia.ro',
-        role: {
-          id: 3,
-          name: 'HR',
-        },
-      };
-      if (username !== 'amanea' || password !== 'amanea') {
-        res = null;
-      }
+      const res = await firstValueFrom(
+				this._http.put<User>(environment.apiUrl + `/login`, {username, password})
+			);
       if (res) {
         this._user = res;
         this.loginStatus.next(true);
@@ -138,6 +116,7 @@ export class UserService {
       }
       return 'Unexpected error occured. Try again!';
     } catch (e) {
+      console.log(e);
       return this.handleError(e);
     }
   }

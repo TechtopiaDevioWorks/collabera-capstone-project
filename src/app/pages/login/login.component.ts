@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(6),
+      Validators.minLength(5),
       Validators.maxLength(25),
     ]),
   });
