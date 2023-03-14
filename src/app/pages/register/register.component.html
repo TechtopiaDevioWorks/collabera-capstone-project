@@ -113,7 +113,7 @@
       <!--Email-->
       <div class="field">
         <label class="label">Email</label>
-        <div class="control has-icons-left has-icons-right">
+        <div class="control has-icons-left">
           <input
             class="input"
             type="email"
@@ -126,15 +126,6 @@
           />
           <span class="icon is-small is-left">
             <i class="fas fa-envelope"></i>
-          </span>
-          <span class="icon is-small is-right">
-            <i
-              class="fas fa-exclamation-triangle"
-              *ngIf="
-                this.registerForm.get('email')?.errors &&
-                !this.registerForm.get('email')?.pristine
-              "
-            ></i>
           </span>
         </div>
         <p
@@ -275,7 +266,6 @@
             Register
           </button>
           <button
-          type="submit"
           class="button is-link m-auto"
         routerLink="/login"
         >

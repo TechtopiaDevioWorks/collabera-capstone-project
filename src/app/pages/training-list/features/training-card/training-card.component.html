@@ -1,6 +1,6 @@
 <div class="card" *ngIf="training" [class.training-expired]="expired">
   <span title="Badge top center" class="badge is-top is-warning" *ngIf="expired">Training expired</span>
-  <span title="Badge top center" class="badge badge-big is-top is-primary" *ngIf="userRoleId === 1 && training.state && !expired">{{training.state | titlecase}}</span>
+  <!--<span title="Badge top center" class="badge badge-big is-top is-primary" *ngIf="userRoleId === 1 && training.state && !expired">{{training.state | titlecase}}</span>-->
     <div class="card-content">
       <div class="media">
         <div class="media-content">

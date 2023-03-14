@@ -1,4 +1,5 @@
 export interface MinUser {
+    id: number;
     username: string;
     firstname: string;
     lastname: string;

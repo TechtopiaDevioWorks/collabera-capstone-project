@@ -16,6 +16,8 @@ import {
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
 import { ToastrModule } from 'ngx-toastr';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenAuthInterceptor } from '@core/interceptors/token-auth.interceptor';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -28,7 +30,7 @@ import { ToastrModule } from 'ngx-toastr';
       preventDuplicates: true,
       closeButton: true,
       progressBar: true,
-      progressAnimation: 'decreasing'
+      progressAnimation: 'decreasing',
     }),
     LayoutModule,
   ],
@@ -40,6 +42,11 @@ import { ToastrModule } from 'ngx-toastr';
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenAuthInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

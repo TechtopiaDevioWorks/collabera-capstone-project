@@ -1,150 +1,28 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   MinTraining,
   Training,
   TrainingFilter,
 } from '@core/interfaces/training';
+import { User } from '@core/interfaces/user';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrainingService {
-  dummyTrainingList: Training[] = [
-    {
-      id: 0,
-      title: 'Introduction to JavaScript',
-      description: 'Learn the basics of JavaScript programming language.',
-      startDate: moment('2023-05-01T10:00:00Z'),
-      endDate: moment('2023-05-05T15:30:00Z'),
-      duration: 30,
-      applicants: [],
-    },
-    {
-      id: 1,
-      title: 'Advanced React Techniques',
-      description: 'Learn advanced techniques for building React applications.',
-      startDate: moment('2023-06-01T09:00:00Z'),
-      endDate: moment('2023-06-03T12:00:00Z'),
-      duration: 15,
-      applicants: [],
-    },
-    {
-      id: 2,
-      title: 'Machine Learning Fundamentals',
-      description:
-        'Learn the basics of machine learning and how to apply it to real-world problems.',
-      startDate: moment('2023-07-01T13:00:00Z'),
-      endDate: moment('2023-07-07T16:30:00Z'),
-      duration: 35,
-      applicants: [],
-    },
-    {
-      id: 3,
-      title: 'Python for Data Science',
-      description: 'Learn how to use Python to analyze and visualize data.',
-      startDate: moment('2023-08-01T09:00:00Z'),
-      endDate: moment('2023-08-05T12:30:00Z'),
-      duration: 25,
-      applicants: [],
-    },
-    {
-      id: 4,
-      title: 'Web Development with Node.js',
-      description:
-        'Learn how to build web applications using Node.js and related technologies.',
-      startDate: moment('2023-09-01T11:00:00Z'),
-      endDate: moment('2023-09-03T14:00:00Z'),
-      duration: 12,
-      applicants: [],
-    },
-    {
-      id: 5,
-      title: 'Introduction to Cloud Computing',
-      description:
-        'Learn the basics of cloud computing and how to use cloud services like AWS and Azure.',
-      startDate: moment('2023-10-01T13:00:00Z'),
-      endDate: moment('2023-10-07T16:30:00Z'),
-      duration: 35,
-      applicants: [],
-    },
-    {
-      id: 6,
-      title: 'Android App Development',
-      description:
-        'Learn how to develop Android apps using Java and Android Studio.',
-      startDate: moment('2023-11-01T10:00:00Z'),
-      endDate: moment('2023-11-05T15:30:00Z'),
-      duration: 30,
-      applicants: [],
-    },
-    {
-      id: 7,
-      title: 'Agile Project Management',
-      description:
-        'Learn the basics of agile project management and how to use agile methodologies like Scrum and Kanban.',
-      startDate: moment('2022-12-01T09:00:00Z'),
-      endDate: moment('2022-12-03T12:00:00Z'),
-      duration: 15,
-      applicants: [],
-    },
-    {
-      id: 8,
-      title: 'Data Structures and Algorithms',
-      description:
-        'Learn about fundamental data structures and algorithms used in computer science.',
-      startDate: moment('2023-01-01T09:00:00Z'),
-      endDate: moment('2023-01-05T12:30:00Z'),
-      duration: 25,
-      applicants: [],
-    },
-    {
-      id: 9,
-      title: 'GraphQL for Modern Web Development',
-      description: 'Learn how to use GraphQL to build modern, scalable APIs.',
-      startDate: moment('2023-02-01T11:00:00Z'),
-      endDate: moment('2023-02-03T14:00:00Z'),
-      duration: 12,
-      applicants: [],
-    },
-    {
-      id: 10,
-      title: 'Deep Learning with TensorFlow',
-      description:
-        'Learn how to use TensorFlow to build deep learning models for image classification and natural language processing.',
-      startDate: moment('2023-03-01T13:00:00Z'),
-      endDate: moment('2023-03-07T16:30:00Z'),
-      duration: 35,
-      applicants: [],
-    },
-    {
-      id: 11,
-      title: 'DevOps Fundamentals',
-      description:
-        'Learn the basics of DevOps and how to implement continuous integration and deployment pipelines.',
-      startDate: moment('2023-04-01T10:00:00Z'),
-      endDate: moment('2023-04-05T15:30:00Z'),
-      duration: 30,
-      applicants: [],
-    },
-    {
-      id: 12,
-      title: 'Building Scalable Microservices',
-      description:
-        'Learn how to design and build microservices-based applications that can scale to meet high demand.',
-      startDate: moment('2023-05-01T09:00:00Z'),
-      endDate: moment('2023-05-03T12:00:00Z'),
-      duration: 15,
-      applicants: [],
-    },
-  ];
+
+  dummyTrainingList: Training[] =[];
 
   private latestTrainingFilteredList: Training[] | MinTraining[] = [];
   private latestTrainingFilter: string | null = null;
 
-  constructor(private _user: UserService) {
+  constructor(private _user: UserService, private _http: HttpClient) {
     const currentMoment = moment.utc();
     this.dummyTrainingList.sort((a, b) => {
       if (
@@ -189,6 +67,7 @@ export class TrainingService {
       this.latestTrainingFilteredList.length > 0
     ) {
     } else {
+      await this.refreshTrainingList();
       const filteredList = this.dummyTrainingList.filter((training) => {
         return Object.keys(filter).every((key) => {
           if (filter[key] === null) return true;
@@ -233,6 +112,7 @@ export class TrainingService {
       this.latestTrainingFilteredList.length > 0
     ) {
     } else {
+      await this.refreshTrainingList();
       const filteredList = this.dummyTrainingList.filter((training) => {
         return Object.keys(filter).every((key) => {
           if (filter[key] === null) return true;
@@ -256,5 +136,45 @@ export class TrainingService {
       this.latestTrainingFilter = JSON.stringify(filter);
     }
     return this.latestTrainingFilteredList.length;
+  }
+
+  private async refreshTrainingList(): Promise<true | string> {
+    try {
+      const res = await firstValueFrom(
+				this._http.get<any[]>(environment.apiUrl + `/training`)
+			);
+      if (res) {
+        this.dummyTrainingList = res.map(apiElm => {
+          const elm: Training = {
+            id: apiElm.id,
+            title: apiElm.name,
+            description: apiElm.description,
+            duration: apiElm.min_hours,
+            status: apiElm.status,
+            startDate: moment(apiElm.start),
+            endDate: moment(apiElm.end),
+            applicants: []
+          }
+          return elm;
+        })
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  private handleError(error: HttpErrorResponse | unknown): string {
+    let errorMessage = 'Unexpected error occured. Try again!';
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 0) {
+        errorMessage = `An error occurred: ${error.error}`;
+      } else {
+        errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
+      }
+    }
+    console.error(errorMessage);
+    return errorMessage;
   }
 }

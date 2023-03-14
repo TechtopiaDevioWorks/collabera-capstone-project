@@ -8,13 +8,7 @@ export interface MinTraining {
   startDate: Moment;
   endDate: Moment;
   duration: number;
-  state?:
-    | 'applied'
-    | 'approved'
-    | 'rejected'
-    | 'canceled'
-    | 'cancel-pending'
-    | null;
+  status:Status;
 }
 
 export interface Training extends MinTraining {
@@ -23,7 +17,12 @@ export interface Training extends MinTraining {
 
 export interface TrainingApplicant {
   user: MinUser;
-  state: 'applied' | 'approved' | 'rejected' | 'canceled' | 'cancel-pending';
+  status: Status;
+}
+
+export interface Status {
+  id: number;
+  name: string;
 }
 
 export interface TrainingFilter {

@@ -65,7 +65,6 @@ export class UserService {
 
   private async checkUserToken(userToken: string): Promise<true | string> {
     try {
-      await this.delay(1000);
       const res = await firstValueFrom(
 				this._http.put<User>(environment.apiUrl + `/token-login`, {token: userToken})
 			);
@@ -123,9 +122,11 @@ export class UserService {
 
   async register(newUser: NewUser): Promise<boolean | string> {
     try {
-      await this.delay(1000);
-      const res = newUser;
+      const res = await firstValueFrom(
+				this._http.post<any>(environment.apiUrl + `/user`, newUser)
+			);
       if (res) {
+        console.log(res);
         return true;
       }
       return 'Unexpected error occured. Try again!';
@@ -134,12 +135,30 @@ export class UserService {
     }
   }
 
+  async updateUserField(userId: number, fieldName: string, value: string|number) {
+    try {
+      const body = {
+      }
+      Object.defineProperty(body, fieldName, {value: value, enumerable: true})
+			const res = await firstValueFrom(
+				this._http.put<User>(environment.apiUrl + `/user${userId ===  this._user?.id ? '' : userId}`, body)
+			);
+			if (res) {
+        if(this._user)
+          await this.checkUserToken(this._user.token);
+			}
+		} catch (e) {
+			this.handleError(e);
+		}
+	}
+
   private handleError(error: HttpErrorResponse | unknown): string {
     let errorMessage = 'Unexpected error occured. Try again!';
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
         errorMessage = `An error occurred: ${error.error}`;
       } else {
+        if (error.error.message) return error.error.message;
         errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
       }
     }
