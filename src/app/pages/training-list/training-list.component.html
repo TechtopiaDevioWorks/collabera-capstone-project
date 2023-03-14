@@ -1,7 +1,7 @@
 <div class="container is-fluid is-flex is-flex-direction-column">
 	<section class="section filter-section">
 		<app-training-list-filter (filterOut)="onFilterChange($event)" [userRoleId]="userRoleId" class="filter-container"></app-training-list-filter>
-		<div class="hr-control">
+		<div class="hr-control" *ngIf="userRoleId === 3">
 			<div class="field is-flex">
 				<button class="button is-outlined m-auto">
 					Add new training

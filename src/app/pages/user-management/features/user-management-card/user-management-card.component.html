@@ -1,0 +1,62 @@
+<div class="card" *ngIf="user">
+  <div class="card-content">
+    <div class="media">
+      <div class="media-content">
+        <p class="title is-6">{{ user.firstname }} {{ user.lastname }}</p>
+        <div class="is-flex">
+          <div class="w-35">
+            <p class="subtitle is-6 m-0">Username:</p>
+          </div>
+          <div class="w-65 has-text-centered">
+            <p class="subtitle is-6 m-0">
+              <strong>{{ user.username }}</strong>
+            </p>
+          </div>
+        </div>
+        <div class="is-flex">
+          <div class="w-25">
+            <p class="subtitle is-6 m-0">Email:</p>
+          </div>
+          <div class="w-75 has-text-centered">
+            <p class="subtitle is-6 m-0">
+              <strong>{{ user.email }}</strong>
+            </p>
+          </div>
+        </div>
+        <div class="is-flex">
+          <div class="w-35">
+            <p class="subtitle is-6 m-0">Role:</p>
+          </div>
+          <div class="w-65 has-text-centered">
+            <p class="subtitle is-6 m-0">
+              <strong>{{ user.role.name }}</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="is-flex" *ngIf="user.team">
+          <div class="w-25">
+            <p class="subtitle is-6 m-0">Team:</p>
+          </div>
+          <div class="w-75 has-text-centered">
+            <p class="subtitle is-6 m-0">
+              <strong>{{ user.team.name }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="card-footer">
+    <ng-container [ngSwitch]="manager?.role?.id">
+      <ng-container *ngSwitchCase="2">
+        <a class="card-footer-item" (click)="onTrainingHistoryClick()" [class.disabled]="user.role.id !== 1">Training history</a>
+      </ng-container>
+      <ng-container *ngSwitchCase="3">
+        <a class="card-footer-item" [routerLink]="user.role.id === 1 ? ['history', user.id] : []" [class.disabled]="user.role.id !== 1">Training history</a>
+        <a class="card-footer-item" [routerLink]="user.id !== manager?.id ? ['edit', user.id] : []" [class.disabled]="user.id === manager?.id">Edit user</a>
+        <a class="card-footer-item" (click)="onDeleteClick()" [class.disabled]="user.id === manager?.id">Delete user</a>
+      </ng-container>
+    </ng-container>
+  </footer>
+</div>

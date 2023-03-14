@@ -1,0 +1,276 @@
+<div class="container is-max-desktop m-auto p-2">
+	<form [formGroup]="profileForm">
+		<!--Username-->
+		<div class="field">
+			<label class="label">Username</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="JohnDoe02"
+					formControlName="username"
+					[class.is-danger]="this.profileForm.get('username')?.errors && !this.profileForm.get('username')?.pristine" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'username' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'username' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('username')?.pristine && this.profileForm.get('username')?.hasError('required')">
+				Username is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('username')?.pristine &&
+					(this.profileForm.get('username')?.hasError('maxlength') ||
+						this.profileForm.get('username')?.hasError('minlength'))
+				">
+				Username must be between 2 and 25 characters.
+			</p>
+		</div>
+		<!--Firstname-->
+		<div class="field">
+			<label class="label">First name</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="John"
+					formControlName="firstname"
+					[class.is-danger]="
+						this.profileForm.get('firstname')?.errors && !this.profileForm.get('firstname')?.pristine
+					" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'firstname' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'firstname' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('firstname')?.pristine && this.profileForm.get('firstname')?.hasError('required')">
+				First name is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('firstname')?.pristine &&
+					(this.profileForm.get('firstname')?.hasError('maxlength') ||
+						this.profileForm.get('firstname')?.hasError('minlength'))
+				">
+				First name must be between 2 and 25 characters.
+			</p>
+		</div>
+		<!--Lastname-->
+		<div class="field">
+			<label class="label">Last name</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="Doe"
+					formControlName="lastname"
+					[class.is-danger]="this.profileForm.get('lastname')?.errors && !this.profileForm.get('lastname')?.pristine" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'lastname' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'lastname' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('lastname')?.pristine && this.profileForm.get('lastname')?.hasError('required')">
+				Last name is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('lastname')?.pristine &&
+					(this.profileForm.get('lastname')?.hasError('maxlength') ||
+						this.profileForm.get('lastname')?.hasError('minlength'))
+				">
+				Last name must be between 2 and 25 characters.
+			</p>
+		</div>
+		<!--Email-->
+		<div class="field">
+			<label class="label">Email</label>
+			<div class="control">
+				<input
+					class="input"
+					type="email"
+					placeholder="john.doe@company.com"
+					formControlName="email"
+					[class.is-danger]="this.profileForm.get('email')?.errors && !this.profileForm.get('email')?.pristine" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'email' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'email' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('email')?.pristine && this.profileForm.get('email')?.hasError('required')">
+				Email is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('email')?.pristine && this.profileForm.get('email')?.hasError('email')">
+				Email is invalid.
+			</p>
+		</div>
+        <!--Role-->
+        <div class="field">
+			<label class="label">Role</label>
+			<div class="control">
+				<div class="select">
+					<select formControlName="role">
+						<option *ngFor="let item of roleList" [value]="item.id">{{ item.name }}</option>
+					</select>
+				</div>
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'role' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'role' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('role')?.pristine && this.profileForm.get('role')?.hasError('required')">
+				Role is required.
+			</p>
+		</div>
+        <!--Team-->
+        <div class="field">
+			<label class="label">Team</label>
+			<div class="control">
+				<div class="select">
+					<select formControlName="team">
+						<option *ngFor="let item of teamList" [value]="item.id">{{ item.name }}</option>
+					</select>
+				</div>
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'team' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'team' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('team')?.pristine && this.profileForm.get('team')?.hasError('required')">
+				Team is required.
+			</p>
+		</div>
+		<!--Password-->
+		<div class="field" *ngIf="fieldInEdit === 'password'">
+			<label class="label">Password</label>
+			<div class="control">
+				<input
+					class="input"
+					type="password"
+					placeholder="******"
+					formControlName="password"
+					[class.is-danger]="
+						this.profileForm.get('password')?.errors && !this.profileForm.get('password')?.pristine
+					" />
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.profileForm.get('password')?.pristine && this.profileForm.get('password')?.hasError('required')">
+				Password is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('password')?.pristine &&
+					(this.profileForm.get('password')?.hasError('maxlength') ||
+						this.profileForm.get('password')?.hasError('minlength'))
+				">
+				Password must be between 6 and 25 characters.
+			</p>
+		</div>
+		<!--Password Confirmation-->
+		<div class="field" *ngIf="fieldInEdit === 'password'">
+			<label class="label">Password Confirmation</label>
+			<div class="control">
+				<input
+					class="input"
+					type="password"
+					placeholder="******"
+					formControlName="passwordConfirmation"
+					[class.is-danger]="
+						this.profileForm.get('passwordConfirmation')?.errors &&
+						!this.profileForm.get('passwordConfirmation')?.pristine
+					" />
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('passwordConfirmation')?.pristine &&
+					this.profileForm.get('passwordConfirmation')?.hasError('required')
+				">
+				Password confirmation is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('passwordConfirmation')?.pristine &&
+					(this.profileForm.get('passwordConfirmation')?.hasError('maxlength') ||
+						this.profileForm.get('passwordConfirmation')?.hasError('minlength'))
+				">
+				Password must be between 6 and 25 characters.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.profileForm.get('passwordConfirmation')?.pristine &&
+					this.profileForm.get('passwordConfirmation')?.hasError('notmatch')
+				">
+				Password confirmation does not match.
+			</p>
+		</div>
+        <!--Password-->
+        <div class="field is-flex">
+            <button class="button is-outlined m-auto" (click)="go2ChangePassword()" *ngIf="fieldInEdit !== 'password'">
+                Change Password
+            </button>
+            <button class="button is-link m-auto" (click)="cancelEditField()" *ngIf="fieldInEdit === 'password'" [disabled]="this.fieldLoading === 'password'">
+                Cancel
+            </button>
+            <button class="button is-primary m-auto" (click)="savePasswordChange()" *ngIf="fieldInEdit === 'password'" [class.is-loading]="this.fieldLoading === 'password'">
+                Save
+            </button>
+        </div>
+        <p class="help is-danger" *ngIf="requestError">
+            {{ requestError }}
+          </p>
+	</form>
+</div>
+
+
+
+<ng-template #noEdit let-fieldName="fieldName"> </ng-template>
+
+<ng-template #startEdit let-fieldName="fieldName">
+	<button class="button is-outlined ml-2" (click)="go2EditField(fieldName)" [disabled]="fieldInEdit">
+		<span class="icon is-small">
+			<i class="fas fa-pen"></i>
+		</span>
+	</button>
+</ng-template>
+
+<ng-template #inEdit let-fieldName="fieldName">
+	<button
+		class="button is-outlined ml-2"
+		[disabled]="
+			!this.profileForm.get(fieldName) ||
+			this.profileForm.get(fieldName)?.pristine || this.profileForm.get(fieldName)?.invalid
+		"
+        (click)="saveEditField(fieldName)" [class.is-loading]="this.fieldLoading === fieldName">
+		<span class="icon is-small">
+			<i class="fas fa-check"></i>
+		</span>
+	</button>
+	<button class="button is-outlined ml-2" (click)="cancelEditField()" [disabled]="this.fieldLoading === fieldName">
+		<span class="icon is-small">
+			<i class="fas fa-times"></i>
+		</span>
+	</button>
+</ng-template>

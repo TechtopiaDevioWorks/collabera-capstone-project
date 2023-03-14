@@ -29,6 +29,12 @@
 				</span>
 				<span>Trainings</span>
 			</a>
+			<a class="navbar-item is-tab" routerLink="/user-management" routerLinkActive="is-active" *ngIf="isHrOrManager">
+				<span class="icon has-text-primary">
+					<i class="fa-solid fa-address-card"></i>
+				</span>
+				<span>User Management</span>
+			</a>
 
             <a class="navbar-item is-tab" routerLink="/contact" routerLinkActive="is-active">
 				<span class="icon has-text-primary">

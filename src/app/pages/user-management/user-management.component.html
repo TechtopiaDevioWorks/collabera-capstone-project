@@ -1,1 +1,24 @@
-<p>user-management works!</p>
+<div class="container is-fluid is-flex is-flex-direction-column">
+	<section class="section filter-section">
+		<!--<app-user-management-filter></app-user-management-filter>-->
+		<div class="hr-control" *ngIf="userRoleId === 3">
+			<div class="field is-flex">
+				<button class="button is-outlined m-auto">
+					Invite user
+				</button>
+			</div>
+		</div>
+	</section>
+	<mat-paginator
+		[length]="userListLength"
+		[pageSize]="pageSize"
+		(page)="onPaginatorChange($event)"
+		[pageSizeOptions]="[5, 10, 25]"
+		aria-label="Select page">
+	</mat-paginator>
+	<div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around">
+        <ng-container *ngFor="let item of userList">
+            <app-user-management-card [user]="item" [manager]="currentUser" *ngIf="currentUser?.id !== item.id"></app-user-management-card>
+        </ng-container>
+	</div>
+</div>

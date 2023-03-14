@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { NewUser, Role, User } from '@core/interfaces/user';
+import { MinUser, NewUser, Role, Team, User } from '@core/interfaces/user';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -135,22 +135,102 @@ export class UserService {
     }
   }
 
-  async updateUserField(userId: number, fieldName: string, value: string|number) {
+  async delete(userId: number): Promise<boolean | string> {
     try {
+      if(userId === this._user?.id) return "Can't delete your own user!";
+      const res = await firstValueFrom(
+				this._http.delete<any>(environment.apiUrl + `/user/${userId}`)
+			);
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async updateUserField(userId: number, fieldName: string, value: string|number): Promise<boolean | string> {
+    try {
+      if (fieldName === 'team') fieldName = 'team_id';
+      if (fieldName === 'role') fieldName = 'role_id';
       const body = {
       }
       Object.defineProperty(body, fieldName, {value: value, enumerable: true})
 			const res = await firstValueFrom(
-				this._http.put<User>(environment.apiUrl + `/user${userId ===  this._user?.id ? '' : userId}`, body)
+				this._http.put<User>(environment.apiUrl + `/user${userId ===  this._user?.id ? '' : `/${userId}`}`, body)
 			);
 			if (res) {
-        if(this._user)
+        if(this._user && userId ===  this._user.id)
           await this.checkUserToken(this._user.token);
+        return true;
 			}
+      return 'Unexpected error occured. Try again!';
 		} catch (e) {
-			this.handleError(e);
+			return this.handleError(e);
 		}
 	}
+
+  async getUserList(): Promise<MinUser[] | string> {
+    try {
+      const res = await firstValueFrom(
+				this._http.get<MinUser[]>(environment.apiUrl + `/user?expand=true`)
+			);
+      if (res) {
+       return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+  async getTeamList(): Promise<Team[] | string> {
+    try {
+      const res = await firstValueFrom(
+				this._http.get<Team[]>(environment.apiUrl + `/team`)
+			);
+      if (res) {
+       return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+  async getRoleList(): Promise<Role[] | string> {
+    try {
+      const res = await firstValueFrom(
+				this._http.get<Role[]>(environment.apiUrl + `/role`)
+			);
+      if (res) {
+       return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+  async getUserById(userId: number): Promise<MinUser | string> {
+    try {
+      const res = await firstValueFrom(
+				this._http.get<MinUser>(environment.apiUrl + `/user/${userId}?expand=true`)
+			);
+      if (res) {
+       return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
 
   private handleError(error: HttpErrorResponse | unknown): string {
     let errorMessage = 'Unexpected error occured. Try again!';
@@ -158,7 +238,7 @@ export class UserService {
       if (error.status === 0) {
         errorMessage = `An error occurred: ${error.error}`;
       } else {
-        if (error.error.message) return error.error.message;
+        if (error.error?.message) return error.error.message;
         errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
       }
     }

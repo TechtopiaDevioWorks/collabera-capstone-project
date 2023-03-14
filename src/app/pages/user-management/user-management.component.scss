@@ -1,0 +1,16 @@
+.filter-container {
+    width: 70%;
+    display: flex;
+    min-width: 330px;
+}
+.hr-control {
+    padding: 1rem;
+    width: 30%;
+    display: flex;
+    min-width: 180px;
+}
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+}

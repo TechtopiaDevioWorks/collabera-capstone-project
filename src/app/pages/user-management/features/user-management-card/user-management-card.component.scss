@@ -1,0 +1,21 @@
+.w-35 {
+    width: 35%;
+}
+.w-65 {
+    width: 65%;
+}
+
+.w-25 {
+    width: 25%;
+}
+.w-75 {
+    width: 75%;
+}
+
+a.disabled {
+    color: hsl(0, 0%, 86%);
+    box-shadow: none;
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HrOrManagerGuard } from '@core/guards/hr-or-manager.guard';
 import { LoggedinGuard } from '@core/guards/loggedin.guard';
 import { NotloggedinGuard } from '@core/guards/notloggedin.guard';
 
@@ -23,6 +24,14 @@ const routes: Routes = [
       import('./pages/terms-conditions/terms-conditions.module').then(
         (m) => m.TermsConditionsModule
       ),
+  },
+  {
+    path: 'user-management',
+    loadChildren: () =>
+      import('./pages/user-management/user-management.module').then(
+        (m) => m.UserManagementModule
+      ),
+    canMatch: [LoggedinGuard, HrOrManagerGuard],
   },
   {
     path: 'trainings',

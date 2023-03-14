@@ -12,8 +12,8 @@ export class EmployeeGuard implements CanMatch {
     route: Route,
     segments: UrlSegment[]
   ): Promise<boolean | UrlTree> {
-    const userRoleId = await this._user.getUserRole();
-    if (userRoleId === 1) {
+    const userRole = await this._user.getUserRole();
+    if (userRole && userRole.id === 1) {
       return true;
     } else {
       return false;
