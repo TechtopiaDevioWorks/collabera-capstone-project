@@ -1,0 +1,27 @@
+.w-35 {
+    width: 35%;
+}
+.w-65 {
+    width: 65%;
+}
+
+.w-25 {
+    width: 25%;
+}
+.w-75 {
+    width: 75%;
+}
+.user-section {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .card {
+        max-width: 500px;
+        min-width: 300px;
+    }
+    .mat-mdc-paginator {
+        margin-top: auto;
+    }
+}

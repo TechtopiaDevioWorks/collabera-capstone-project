@@ -93,7 +93,6 @@ export class UserManagementEditUserComponent implements OnInit, OnDestroy {
     } else {
       this.teamList = teamList;
     }
-    console.log(teamList);
   }
 
   async initRoleList() {
@@ -103,7 +102,6 @@ export class UserManagementEditUserComponent implements OnInit, OnDestroy {
     } else {
       this.roleList = roleList;
     }
-    console.log(roleList);
   }
 
   initForm() {

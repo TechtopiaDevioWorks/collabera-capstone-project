@@ -165,12 +165,55 @@ export class TrainingService {
     }
   }
 
+  async delete(trainingId: number): Promise<boolean | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.delete<any>(environment.apiUrl + `/training/${trainingId}`)
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async getTrainingById(trainingId: number): Promise<Training | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.get<any>(
+          environment.apiUrl + `/training/${trainingId}?expand=true`
+        )
+      );
+      if (res) {
+        return {
+          id: res.id,
+          title: res.name,
+          description: res.description,
+          duration: res.min_hours,
+          status: res.status,
+          startDate: moment(res.start),
+          endDate: moment(res.end),
+          applicants: []
+        };
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+
   private handleError(error: HttpErrorResponse | unknown): string {
     let errorMessage = 'Unexpected error occured. Try again!';
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
         errorMessage = `An error occurred: ${error.error}`;
       } else {
+        if (error.error?.message) return error.error.message;
         errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
       }
     }

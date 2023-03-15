@@ -31,3 +31,11 @@ export interface TrainingFilter {
   applicants?: true | null;
   [key: string]: any;
 }
+
+export interface TrainingRegistrationMax {
+  id: number;
+  status: Status;
+  training: MinTraining;
+  user: MinUser;
+  registration_date: Moment;
+}

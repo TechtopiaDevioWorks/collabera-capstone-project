@@ -30,3 +30,12 @@ export interface Team {
     id: number;
     name: string;
 }
+
+export interface Invite {
+    id: number;
+    email: string;
+    role: Role;
+    team?: Team;
+    user_created: Boolean;
+    token: string;
+}

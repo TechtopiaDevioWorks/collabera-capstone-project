@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { TrainingInfoComponent } from './training-info.component';
 
 const routes: Routes = [
-  {path: '', component: TrainingInfoComponent}
+  {path: '', component: TrainingInfoComponent},
+  {path: ':id', component: TrainingInfoComponent}
 ];
 
 @NgModule({

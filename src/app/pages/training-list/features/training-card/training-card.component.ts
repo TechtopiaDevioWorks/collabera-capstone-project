@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MinTraining, Training } from '@core/interfaces/training';
 import * as moment from 'moment';
+import { TrainingDeleteDialogComponent } from '../training-delete-dialog/training-delete-dialog.component';
 
 @Component({
   selector: 'app-training-card',
@@ -14,9 +16,8 @@ export class TrainingCardComponent implements OnInit{
   expired = false;
   @Output() applyTraining: EventEmitter<number> = new EventEmitter()
   @Output() editTraining: EventEmitter<number> = new EventEmitter()
-  @Output() deleteTraining: EventEmitter<number> = new EventEmitter()
   @Output() infoTraining: EventEmitter<number> = new EventEmitter()
-  constructor() {
+  constructor(private dialog: MatDialog) {
 
   }
   ngOnInit(): void {
@@ -28,6 +29,14 @@ export class TrainingCardComponent implements OnInit{
     if(this.training?.endDate.isBefore(currentMoment)) {
       this.expired = true;
     }
+  }
+
+  onDeleteClick() {
+    this.dialog.open(TrainingDeleteDialogComponent, {
+      data: {
+        training: this.training
+      }
+    })
   }
 
 }

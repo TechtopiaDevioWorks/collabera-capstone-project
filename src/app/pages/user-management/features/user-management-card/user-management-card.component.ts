@@ -23,12 +23,7 @@ export class UserManagementCardComponent implements OnInit {
       }
     })
   }
-
-  onEditClick() {
-    if(this.user?.id === this.manager?.id) return;
-    console.log('edituser');
-  }
-
+  
   onTrainingHistoryClick() {
     if(this.user?.role.id !== 1) return;
   }

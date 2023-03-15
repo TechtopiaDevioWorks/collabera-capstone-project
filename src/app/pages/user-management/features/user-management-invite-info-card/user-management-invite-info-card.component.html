@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Invite Created</h1>
+<div mat-dialog-content>
+  <div class="card" *ngIf="data.invite">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-6">
+            {{ data.invite.email }}
+          </p>
+          <div class="is-flex">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Role:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0 ml-1">
+                <strong>{{ data.invite.role.name }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex" *ngIf="data.invite.team">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Team:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0 ml-1">
+                <strong>{{ data.invite.team.name }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex is-flex-direction-column mt-1" *ngIf="data.invite.token">
+            <div class="w-100">
+              <p class="subtitle is-6 m-0">Send this token to the new user.</p>
+            </div>
+            <div class="w-100 has-text-centered">
+                <div class="field">
+                    <div class="control">
+                      <textarea class="textarea is-small has-fixed-size" readonly>{{data.invite.token}}</textarea>
+                    </div>
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" mat-dialog-close>Close</button>
+</div>

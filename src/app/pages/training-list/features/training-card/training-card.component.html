@@ -33,9 +33,9 @@
           <a class="card-footer-item" (click)="infoTraining.next(training.id)">Applicants</a>
         </ng-container>
         <ng-container *ngSwitchCase="3">
-          <a class="card-footer-item" (click)="infoTraining.next(training.id)">Info</a>
-          <a class="card-footer-item" (click)="editTraining.next(training.id)">Edit</a>
-          <a class="card-footer-item" (click)="deleteTraining.next(training.id)">Delete</a>
+          <a class="card-footer-item" [routerLink]="['/training', training.id]">Info</a>
+          <a class="card-footer-item" [routerLink]="['/training', training.id]" [queryParams]="{edit: true}">Edit</a>
+          <a class="card-footer-item" (click)="onDeleteClick()">Delete</a>
         </ng-container>
       </ng-container>
     </footer>

@@ -11,6 +11,9 @@ import { UserManagementDeleteUserDialogComponent } from './features/user-managem
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserManagementEditUserComponent } from './features/user-management-edit-user/user-management-edit-user.component';
 import { UserManagementTrainingHistoryComponent } from './features/user-management-training-history/user-management-training-history.component';
+import { UserManagementInviteCardComponent } from './features/user-management-invite-card/user-management-invite-card.component';
+import { UserManagementInviteInfoCardComponent } from './features/user-management-invite-info-card/user-management-invite-info-card.component';
+import { PastTrainingListModule } from '@shared/past-training-list/past-training-list.module';
 
 
 @NgModule({
@@ -20,14 +23,17 @@ import { UserManagementTrainingHistoryComponent } from './features/user-manageme
     UserManagementCardComponent,
     UserManagementDeleteUserDialogComponent,
     UserManagementEditUserComponent,
-    UserManagementTrainingHistoryComponent
+    UserManagementTrainingHistoryComponent,
+    UserManagementInviteCardComponent,
+    UserManagementInviteInfoCardComponent
   ],
   imports: [
     CommonModule,
     UserManagementRoutingModule,
     CoreModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    PastTrainingListModule
   ],
   providers: [MatDialog]
 })

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
+import { User } from '@core/interfaces/user';
 import { UserService } from '@core/services/user.service';
 
 @Component({
@@ -28,6 +29,7 @@ export class ProfileComponent {
 	});
   fieldInEdit: string|null = null;
   fieldLoading: string | null = null;
+  currentUser: User | null = null;
   trainableUser = false;
 	constructor(private _user: UserService) {}
 
@@ -46,16 +48,16 @@ export class ProfileComponent {
     this.profileForm
     .get('passwordConfirmation')
     ?.addValidators(this.checkPasswords);
-    const user = this._user.getUserInfo();
-    if(user) {
-      this.profileForm.get('username')?.setValue(user.username);
-      this.profileForm.get('firstname')?.setValue(user.firstname);
-      this.profileForm.get('lastname')?.setValue(user.lastname);
-      this.profileForm.get('email')?.setValue(user.email);
-      if (user.team)
-        this.profileForm.get('team')?.setValue(user.team?.name);
-      this.profileForm.get('role')?.setValue(user.role.name);
-      if(user.role.id === 1)
+   this.currentUser = this._user.getUserInfo();
+    if(this.currentUser) {
+      this.profileForm.get('username')?.setValue(this.currentUser.username);
+      this.profileForm.get('firstname')?.setValue(this.currentUser.firstname);
+      this.profileForm.get('lastname')?.setValue(this.currentUser.lastname);
+      this.profileForm.get('email')?.setValue(this.currentUser.email);
+      if (this.currentUser.team)
+        this.profileForm.get('team')?.setValue(this.currentUser.team?.name);
+      this.profileForm.get('role')?.setValue(this.currentUser.role.name);
+      if(this.currentUser.role.id === 1)
         this.trainableUser = true;
     }
   }

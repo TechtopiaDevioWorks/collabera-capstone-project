@@ -1,1 +1,55 @@
-<p>user-management-training-history works!</p>
+<div class="container is-fluid is-flex is-flex-direction-column">
+	<section class="section user-section">
+        <div class="card" *ngIf="user">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <p class="title is-6">{{ user.firstname }} {{ user.lastname }}</p>
+                  <div class="is-flex">
+                    <div class="w-35">
+                      <p class="subtitle is-6 m-0">Username:</p>
+                    </div>
+                    <div class="w-65 has-text-centered">
+                      <p class="subtitle is-6 m-0">
+                        <strong>{{ user.username }}</strong>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="is-flex">
+                    <div class="w-25">
+                      <p class="subtitle is-6 m-0">Email:</p>
+                    </div>
+                    <div class="w-75 has-text-centered">
+                      <p class="subtitle is-6 m-0">
+                        <strong>{{ user.email }}</strong>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="is-flex">
+                    <div class="w-35">
+                      <p class="subtitle is-6 m-0">Role:</p>
+                    </div>
+                    <div class="w-65 has-text-centered">
+                      <p class="subtitle is-6 m-0">
+                        <strong>{{ user.role.name }}</strong>
+                      </p>
+                    </div>
+                  </div>
+          
+                  <div class="is-flex" *ngIf="user.team">
+                    <div class="w-25">
+                      <p class="subtitle is-6 m-0">Team:</p>
+                    </div>
+                    <div class="w-75 has-text-centered">
+                      <p class="subtitle is-6 m-0">
+                        <strong>{{ user.team.name }}</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+	</section>
+    <app-past-training-list [user]="user"></app-past-training-list>
+</div>

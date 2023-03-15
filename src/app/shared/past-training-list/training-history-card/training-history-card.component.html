@@ -1,0 +1,49 @@
+<div class="card" *ngIf="training">
+    <span title="Badge top center" class="badge is-top is-primary">{{training.status.name}}</span>
+        <div class="card-content">
+        <div class="media">
+          <div class="media-content">
+            <p class="title is-6">{{training.training.title}}</p>
+            <div class="is-flex">
+              <div class="w-50">
+                <p class="subtitle is-6 m-0">Starts on:</p>
+                <p class="subtitle is-6 m-0">Ends on:</p>
+                <p class="subtitle is-6 m-0">Requires:</p>
+              </div>
+              <div class="w-50 has-text-centered">
+                <p class="subtitle is-6 m-0"><strong>{{training.training.startDate | moment}}</strong></p>
+                <p class="subtitle is-6 m-0"><strong>{{training.training.endDate | moment}}</strong></p>
+                <p class="subtitle is-6 m-0"><strong>{{training.training.duration}} hours</strong></p>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <div class="content">
+          <p class="subtitle is-6">{{training.training.description}}</p>
+          <div class="is-flex">
+            <div class="w-50">
+              <p class="subtitle is-6 m-0">Registered on:</p>
+            </div>
+            <div class="w-50 has-text-centered">
+              <p class="subtitle is-6 m-0"><strong>{{training.registration_date | moment}}</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <ng-container [ngSwitch]="currentUser?.role?.id">
+          <ng-container *ngSwitchCase="1">
+            <a class="card-footer-item">Apply</a>
+          </ng-container>
+          <ng-container *ngSwitchCase="2">
+            <a class="card-footer-item">Applicants</a>
+          </ng-container>
+          <ng-container *ngSwitchCase="3">
+            <a class="card-footer-item">Info</a>
+            <a class="card-footer-item">Edit</a>
+            <a class="card-footer-item">Delete</a>
+          </ng-container>
+        </ng-container>
+      </footer>
+  </div>

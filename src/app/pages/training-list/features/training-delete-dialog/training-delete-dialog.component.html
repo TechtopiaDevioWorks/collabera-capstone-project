@@ -1,0 +1,63 @@
+<h1 mat-dialog-title>Confirm delete</h1>
+<div mat-dialog-content>
+  <h6 class="title is-6">Please confirm delete of training</h6>
+  <div class="card" *ngIf="data.training">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-6">
+            {{ data.training.title }}
+          </p>
+          <div class="is-flex">
+            <div class="w-50">
+              <p class="subtitle is-6 m-0">Starts on:</p>
+            </div>
+            <div class="w-50 has-text-centered">
+              <p class="subtitle is-6 m-0 ml-1">
+                <strong>{{ data.training.startDate | moment }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex">
+            <div class="w-25">
+              <p class="subtitle is-6 m-0">Ends on:</p>
+            </div>
+            <div class="w-75 has-text-centered">
+              <p class="subtitle is-6 m-0 ml-1">
+                <strong>{{ data.training.endDate | moment }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Duration:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0 ml-1">
+                <strong>{{data.training.duration}} hours</strong>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="content">
+        <p class="subtitle is-6">{{data.training.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" mat-dialog-close>Cancel</button>
+
+  <button
+    class="button is-primary m-auto"
+    [class.is-loading]="requestLoading"
+    (click)="onConfirmClick()"
+  >
+    Confirm
+  </button>
+</div>
+<p class="help is-danger m-2" *ngIf="requestError">
+    {{ requestError }}
+</p>

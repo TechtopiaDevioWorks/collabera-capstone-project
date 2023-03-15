@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TrainingInfoRoutingModule } from './training-info-routing.module';
 import { TrainingInfoComponent } from './training-info.component';
+import { CoreModule } from '@core/core.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { TrainingInfoComponent } from './training-info.component';
   ],
   imports: [
     CommonModule,
-    TrainingInfoRoutingModule
+    TrainingInfoRoutingModule,
+    CoreModule
   ]
 })
 export class TrainingInfoModule { }

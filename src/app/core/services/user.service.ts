@@ -1,7 +1,16 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { MinUser, NewUser, Role, Team, User } from '@core/interfaces/user';
+import { TrainingRegistrationMax } from '@core/interfaces/training';
+import {
+  Invite,
+  MinUser,
+  NewUser,
+  Role,
+  Team,
+  User,
+} from '@core/interfaces/user';
+import * as moment from 'moment';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -66,8 +75,10 @@ export class UserService {
   private async checkUserToken(userToken: string): Promise<true | string> {
     try {
       const res = await firstValueFrom(
-				this._http.put<User>(environment.apiUrl + `/token-login`, {token: userToken})
-			);
+        this._http.put<User>(environment.apiUrl + `/token-login`, {
+          token: userToken,
+        })
+      );
       if (res) {
         this._user = res;
         return true;
@@ -105,8 +116,11 @@ export class UserService {
   async login(username: string, password: string): Promise<boolean | string> {
     try {
       const res = await firstValueFrom(
-				this._http.put<User>(environment.apiUrl + `/login`, {username, password})
-			);
+        this._http.put<User>(environment.apiUrl + `/login`, {
+          username,
+          password,
+        })
+      );
       if (res) {
         this._user = res;
         this.loginStatus.next(true);
@@ -123,8 +137,8 @@ export class UserService {
   async register(newUser: NewUser): Promise<boolean | string> {
     try {
       const res = await firstValueFrom(
-				this._http.post<any>(environment.apiUrl + `/user`, newUser)
-			);
+        this._http.post<any>(environment.apiUrl + `/user`, newUser)
+      );
       if (res) {
         console.log(res);
         return true;
@@ -137,10 +151,10 @@ export class UserService {
 
   async delete(userId: number): Promise<boolean | string> {
     try {
-      if(userId === this._user?.id) return "Can't delete your own user!";
+      if (userId === this._user?.id) return "Can't delete your own user!";
       const res = await firstValueFrom(
-				this._http.delete<any>(environment.apiUrl + `/user/${userId}`)
-			);
+        this._http.delete<any>(environment.apiUrl + `/user/${userId}`)
+      );
       if (res) {
         console.log(res);
         return true;
@@ -151,34 +165,110 @@ export class UserService {
     }
   }
 
-  async updateUserField(userId: number, fieldName: string, value: string|number): Promise<boolean | string> {
+  async invite(
+    email: string,
+    role_id: number,
+    team_id: number | null
+  ): Promise<Invite | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.post<any>(environment.apiUrl + `/invite`, {
+          email,
+          role_id,
+          team_id,
+        })
+      );
+      if (res && res.invite) {
+        const invite: Invite = res.invite;
+        return invite;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async updateUserField(
+    userId: number,
+    fieldName: string,
+    value: string | number
+  ): Promise<boolean | string> {
     try {
       if (fieldName === 'team') fieldName = 'team_id';
       if (fieldName === 'role') fieldName = 'role_id';
-      const body = {
-      }
-      Object.defineProperty(body, fieldName, {value: value, enumerable: true})
-			const res = await firstValueFrom(
-				this._http.put<User>(environment.apiUrl + `/user${userId ===  this._user?.id ? '' : `/${userId}`}`, body)
-			);
-			if (res) {
-        if(this._user && userId ===  this._user.id)
+      const body = {};
+      Object.defineProperty(body, fieldName, {
+        value: value,
+        enumerable: true,
+      });
+      const res = await firstValueFrom(
+        this._http.put<User>(
+          environment.apiUrl +
+            `/user${userId === this._user?.id ? '' : `/${userId}`}`,
+          body
+        )
+      );
+      if (res) {
+        if (this._user && userId === this._user.id)
           await this.checkUserToken(this._user.token);
         return true;
-			}
+      }
       return 'Unexpected error occured. Try again!';
-		} catch (e) {
-			return this.handleError(e);
-		}
-	}
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async getTrainingHistory(
+    userid: number,
+    history = false
+  ): Promise<TrainingRegistrationMax[] | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.get<any[]>(
+          environment.apiUrl +
+            `/training-history${userid === this._user?.id ? '' : `/${userid}`}`
+        )
+      );
+      if (res) {
+        let trainingList = res.map((apiElm) => {
+          const elm: TrainingRegistrationMax = {
+            id: apiElm.id,
+            registration_date: moment(apiElm.registration_date),
+            training: {
+              id: apiElm.training.id,
+              title: apiElm.training.name,
+              description: apiElm.training.description,
+              duration: apiElm.training.min_hours,
+              status: apiElm.training.status,
+              startDate: moment(apiElm.training.start),
+              endDate: moment(apiElm.training.end),
+            },
+            user: apiElm.user,
+            status: apiElm.status,
+          };
+          return elm;
+        });
+        if (history) {
+          const currentMoment = moment.utc();
+          trainingList = trainingList.filter(el => el.training.endDate.isBefore(currentMoment, 'day'))
+        }
+        return trainingList;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
 
   async getUserList(): Promise<MinUser[] | string> {
     try {
       const res = await firstValueFrom(
-				this._http.get<MinUser[]>(environment.apiUrl + `/user?expand=true`)
-			);
+        this._http.get<MinUser[]>(environment.apiUrl + `/user?expand=true`)
+      );
       if (res) {
-       return res;
+        return res;
       }
       return 'Unexpected error occured. Try again!';
     } catch (e) {
@@ -190,10 +280,10 @@ export class UserService {
   async getTeamList(): Promise<Team[] | string> {
     try {
       const res = await firstValueFrom(
-				this._http.get<Team[]>(environment.apiUrl + `/team`)
-			);
+        this._http.get<Team[]>(environment.apiUrl + `/team`)
+      );
       if (res) {
-       return res;
+        return res;
       }
       return 'Unexpected error occured. Try again!';
     } catch (e) {
@@ -205,10 +295,10 @@ export class UserService {
   async getRoleList(): Promise<Role[] | string> {
     try {
       const res = await firstValueFrom(
-				this._http.get<Role[]>(environment.apiUrl + `/role`)
-			);
+        this._http.get<Role[]>(environment.apiUrl + `/role`)
+      );
       if (res) {
-       return res;
+        return res;
       }
       return 'Unexpected error occured. Try again!';
     } catch (e) {
@@ -220,10 +310,12 @@ export class UserService {
   async getUserById(userId: number): Promise<MinUser | string> {
     try {
       const res = await firstValueFrom(
-				this._http.get<MinUser>(environment.apiUrl + `/user/${userId}?expand=true`)
-			);
+        this._http.get<MinUser>(
+          environment.apiUrl + `/user/${userId}?expand=true`
+        )
+      );
       if (res) {
-       return res;
+        return res;
       }
       return 'Unexpected error occured. Try again!';
     } catch (e) {

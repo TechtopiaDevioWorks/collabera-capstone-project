@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MinUser } from '@core/interfaces/user';
 import { UserService } from '@core/services/user.service';
+import { UserManagementInviteCardComponent } from './features/user-management-invite-card/user-management-invite-card.component';
 
 @Component({
   selector: 'app-user-management',
@@ -16,7 +18,7 @@ export class UserManagementComponent implements OnInit{
   pageNumber = 0;
   userListLength = 0;
 
-  constructor(private _user: UserService){}
+  constructor(private _user: UserService, public dialog: MatDialog){}
 
   ngOnInit(): void {
     this.initUserList();
@@ -38,5 +40,10 @@ export class UserManagementComponent implements OnInit{
     this.pageNumber = e.pageIndex;
     this.pageSize = e.pageSize;
     //this.refreshList();
+  }
+
+  onInviteClick() {
+    this.dialog.open(UserManagementInviteCardComponent, {
+    })
   }
 }

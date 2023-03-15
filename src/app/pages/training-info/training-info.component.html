@@ -1,1 +1,121 @@
-<p>training-info works!</p>
+<div class="container is-max-desktop m-auto p-2">
+	<form [formGroup]="trainingForm">
+		<!--Username-->
+		<div class="field">
+			<label class="label">Title</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="Training title"
+					formControlName="title"
+					[class.is-danger]="this.trainingForm.get('title')?.errors && !this.trainingForm.get('title')?.pristine" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'title' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'title' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.trainingForm.get('title')?.pristine && this.trainingForm.get('title')?.hasError('required')">
+				Title is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.trainingForm.get('title')?.pristine &&
+					(this.trainingForm.get('title')?.hasError('maxlength') ||
+						this.trainingForm.get('title')?.hasError('minlength'))
+				">
+				Title must be between 2 and 25 characters.
+			</p>
+		</div>
+		<!--Firstname-->
+		<div class="field">
+			<label class="label">Description</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="Training description"
+					formControlName="description"
+					[class.is-danger]="
+						this.trainingForm.get('description')?.errors && !this.trainingForm.get('description')?.pristine
+					" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'description' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'description' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.trainingForm.get('description')?.pristine && this.trainingForm.get('description')?.hasError('required')">
+				Description is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.trainingForm.get('description')?.pristine &&
+					(this.trainingForm.get('description')?.hasError('maxlength') ||
+						this.trainingForm.get('description')?.hasError('minlength'))
+				">
+				Description must be between 2 and 25 characters.
+			</p>
+		</div>
+		<!--Lastname-->
+		<div class="field">
+			<label class="label">Minimum hours to pass</label>
+			<div class="control">
+				<input
+					class="input"
+					type="number"
+					placeholder="20"
+					formControlName="minHours"
+					[class.is-danger]="this.trainingForm.get('minHours')?.errors && !this.trainingForm.get('minHours')?.pristine" />
+				<ng-container
+					[ngTemplateOutlet]="fieldInEdit === 'minHours' ? inEdit : startEdit"
+					[ngTemplateOutletContext]="{ fieldName: 'minHours' }">
+				</ng-container>
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.trainingForm.get('minHours')?.pristine && this.trainingForm.get('minHours')?.hasError('required')">
+				Minium hours field is required.
+			</p>
+		</div>
+        <p class="help is-danger" *ngIf="requestError">
+            {{ requestError }}
+          </p>
+	</form>
+</div>
+
+
+
+<ng-template #noEdit let-fieldName="fieldName"> </ng-template>
+
+<ng-template #startEdit let-fieldName="fieldName">
+	<button class="button is-outlined ml-2" (click)="go2EditField(fieldName)" [disabled]="fieldInEdit">
+		<span class="icon is-small">
+			<i class="fas fa-pen"></i>
+		</span>
+	</button>
+</ng-template>
+
+<ng-template #inEdit let-fieldName="fieldName">
+	<button
+		class="button is-outlined ml-2"
+		[disabled]="
+			!this.trainingForm.get(fieldName) ||
+			this.trainingForm.get(fieldName)?.pristine || this.trainingForm.get(fieldName)?.invalid
+		"
+        (click)="saveEditField(fieldName)" [class.is-loading]="this.fieldLoading === fieldName">
+		<span class="icon is-small">
+			<i class="fas fa-check"></i>
+		</span>
+	</button>
+	<button class="button is-outlined ml-2" (click)="cancelEditField()" [disabled]="this.fieldLoading === fieldName">
+		<span class="icon is-small">
+			<i class="fas fa-times"></i>
+		</span>
+	</button>
+</ng-template>

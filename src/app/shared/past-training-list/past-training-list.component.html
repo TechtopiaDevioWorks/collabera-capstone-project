@@ -1,9 +1,15 @@
-<mat-paginator
+<!--<mat-paginator
     [length]="trainingListLength"
     [pageSize]="pageSize"
     (page)="onPaginatorChange($event)"
     [pageSizeOptions]="[3, 5, 10]"
     aria-label="Select page">
-</mat-paginator>
+</mat-paginator>-->
 <div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around">
+    <ng-container *ngFor="let item of trainingList">
+        <app-training-history-card [currentUser]="currentUser" [training]="item"></app-training-history-card>
+        <!--
+        <app-user-management-card [user]="item" [manager]="currentUser" *ngIf="currentUser?.id !== item.id"></app-user-management-card>
+        -->
+    </ng-container>
 </div>
