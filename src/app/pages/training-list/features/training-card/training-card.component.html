@@ -1,46 +1,133 @@
-<div class="card" *ngIf="training" [class.training-expired]="expired && userRoleId === 1">
-  <span title="Badge top center" class="badge is-top is-warning" *ngIf="expired">Training expired</span>
+<div
+  class="card"
+  *ngIf="training"
+  [class.training-expired]="expired && userRoleId === 1"
+>
+  <span title="Badge top center" class="badge is-top is-warning" *ngIf="expired"
+    >Training expired</span
+  >
   <!--<span title="Badge top center" class="badge badge-big is-top is-primary" *ngIf="userRoleId === 1 && training.state && !expired">{{training.state | titlecase}}</span>-->
-    <div class="card-content">
-      <div class="media">
-        <div class="media-content">
-          <p class="title is-6">{{training.title}}</p>
-          <div class="is-flex">
-            <div class="w-50">
-              <p class="subtitle is-6 m-0">Starts on:</p>
-              <p class="subtitle is-6 m-0">Ends on:</p>
-              <p class="subtitle is-6 m-0">Requires:</p>
-            </div>
-            <div class="w-50 has-text-centered">
-              <p class="subtitle is-6 m-0"><strong>{{training.startDate | moment}}</strong></p>
-              <p class="subtitle is-6 m-0"><strong>{{training.endDate | moment}}</strong></p>
-              <p class="subtitle is-6 m-0"><strong>{{training.duration}} hours</strong></p>
-            </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-content">
+        <p class="title is-6">{{ training.title }}</p>
+        <div class="is-flex">
+          <div class="w-50">
+            <p class="subtitle is-6 m-0">Starts on:</p>
+            <p class="subtitle is-6 m-0">Ends on:</p>
+            <p class="subtitle is-6 m-0">Requires:</p>
           </div>
-         
+          <div class="w-50 has-text-centered">
+            <p class="subtitle is-6 m-0">
+              <strong>{{ training.startDate | moment }}</strong>
+            </p>
+            <p class="subtitle is-6 m-0">
+              <strong>{{ training.endDate | moment }}</strong>
+            </p>
+            <p class="subtitle is-6 m-0">
+              <strong>{{ training.duration }} hours</strong>
+            </p>
+          </div>
         </div>
       </div>
-      <div class="content">
-        <p class="subtitle is-6">{{training.description}}</p>
-      </div>
     </div>
-    <footer class="card-footer">
-      <ng-container [ngSwitch]="userRoleId">
-        <ng-container *ngSwitchCase="1">
-          <a class="card-footer-item" (click)="onApplyClick()">Apply</a>
-        </ng-container>
-        <ng-container *ngSwitchCase="2">
-          <a class="card-footer-item" [routerLink]="['/training-info', training.id]" [class.disabled]="!training.noapplicants">
-            <span title="Badge top center" class="badge is-top is-primary" *ngIf="training.noapplicants">Applicants {{training.noapplicants}}</span>
-            <span [class.span-disabled]="!training.noapplicants">Applicants</span></a>
-        </ng-container>
-        <ng-container *ngSwitchCase="3">
-          <a class="card-footer-item" [routerLink]="['/training-info', training.id]">
-            <span title="Badge top center" class="badge is-top is-primary" *ngIf="training.noapplicants">Applicants {{training.noapplicants}}</span>
-            <span>Info</span></a>
-          <a class="card-footer-item" [routerLink]="['/training-edit', training.id]">Edit</a>
-          <a class="card-footer-item" (click)="onDeleteClick()">Delete</a>
+    <div class="content">
+      <p class="subtitle is-6">{{ training.description }}</p>
+    </div>
+  </div>
+  <footer class="card-footer">
+    <ng-container [ngSwitch]="userRoleId">
+      <ng-container *ngSwitchCase="1">
+        <a
+          class="card-footer-item"
+          (click)="onApplyClick()"
+          *ngIf="!userTrainingRegistration"
+          >Apply</a
+        >
+        <ng-container *ngIf="userTrainingRegistration">
+          <a
+            class="card-footer-item"
+            (click)="onDeleteRegistration()"
+            *ngIf="userTrainingRegistration.status.id === 1"
+          >
+            <span>
+              <span title="Badge top center" class="badge is-top is-primary">{{
+                userTrainingRegistration.status.name
+              }}</span>
+              Delete registration
+            </span></a
+          >
+          <a
+            class="card-footer-item"
+            (click)="onViewReason()"
+            *ngIf="userTrainingRegistration.status.id === 2"
+          >
+            <span>
+              <span title="Badge top center" class="badge is-top is-danger">{{
+                userTrainingRegistration.status.name
+              }}</span>
+              View Reason
+            </span></a
+          >
+          <ng-container *ngIf="userTrainingRegistration.status.id === 3">
+            <a class="card-footer-item" (click)="onAddAttendance()" [class.disabled]="!training.startDate.isSameOrBefore(currentDate, 'd')">
+              <span>
+                <span
+                  title="Badge top center"
+                  class="badge is-top is-success"
+                  >{{ userTrainingRegistration.status.name }}</span
+                >
+                <span class="card-footer-item-button">
+                  Add attendance
+
+                </span>
+              </span></a
+            >
+            <a class="card-footer-item" (click)="onGiveFeedback()" *ngIf="training.endDate.isSameOrBefore(currentDate, 'd')">
+              <span>
+                Give feedback
+              </span></a
+            >
+          </ng-container>
         </ng-container>
       </ng-container>
-    </footer>
+      <ng-container *ngSwitchCase="2">
+        <a
+          class="card-footer-item"
+          [routerLink]="['/training-info', training.id]"
+          [class.disabled]="!training.noapplicants"
+        >
+          <span
+            title="Badge top center"
+            class="badge is-top is-primary"
+            *ngIf="training.noapplicants"
+            >Applicants {{ training.noapplicants }}</span
+          >
+          <span [class.span-disabled]="!training.noapplicants"
+            >Applicants</span
+          ></a
+        >
+      </ng-container>
+      <ng-container *ngSwitchCase="3">
+        <a
+          class="card-footer-item"
+          [routerLink]="['/training-info', training.id]"
+        >
+          <span
+            title="Badge top center"
+            class="badge is-top is-primary"
+            *ngIf="training.noapplicants"
+            >Applicants {{ training.noapplicants }}</span
+          >
+          <span>Info</span></a
+        >
+        <a
+          class="card-footer-item"
+          [routerLink]="['/training-edit', training.id]"
+          >Edit</a
+        >
+        <a class="card-footer-item" (click)="onDeleteClick()">Delete</a>
+      </ng-container>
+    </ng-container>
+  </footer>
 </div>

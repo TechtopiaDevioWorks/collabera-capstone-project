@@ -48,3 +48,11 @@ export interface TrainingRegistrationMax {
   user: MinUser;
   registration_date: Moment;
 }
+
+export interface TrainingRegistrationMin {
+  id: number;
+  status_id: number;
+  training_id: number;
+  user_id: number;
+  registration_date: Moment;
+}

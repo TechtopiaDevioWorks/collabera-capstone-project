@@ -4,6 +4,7 @@ import {
   MinTraining,
   Training,
   TrainingFilter,
+  TrainingRegistrationMax,
 } from '@core/interfaces/training';
 import { TrainingService } from '@core/services/training.service';
 import { UserService } from '@core/services/user.service';
@@ -20,6 +21,7 @@ export class TrainingListComponent implements OnInit {
   pageNumber = 0;
   trainingListLength = 0;
   userRoleId: number | null = null;
+  userTrainingRegistrationList: TrainingRegistrationMax[] = [];
   constructor(private _user: UserService, private _training: TrainingService) {}
 
   ngOnInit(): void {
@@ -29,7 +31,19 @@ export class TrainingListComponent implements OnInit {
   async initTrainings() {
     const userRole = await this._user.getUserRole();
     this.userRoleId = userRole ? userRole.id : null;
+    if(this.userRoleId === 1) this.initUserTrainingRegistrationList();
     this.onFilterChange(this.filterInfo);
+  }
+
+  async initUserTrainingRegistrationList() {
+    const currentUser = this._user.getUserInfo();
+    if(!currentUser) return;
+    const userTrainingRegistrationList = await this._user.getTrainingHistory(currentUser.id, false);
+    if(typeof userTrainingRegistrationList === 'string') {
+      console.error(userTrainingRegistrationList);
+    } else {
+      this.userTrainingRegistrationList =  userTrainingRegistrationList;
+    }
   }
 
   async onFilterChange(newFilter: TrainingFilter) {

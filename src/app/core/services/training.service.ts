@@ -7,6 +7,7 @@ import {
   Training,
   TrainingFilter,
   TrainingRegistrationMax,
+  TrainingRegistrationMin,
 } from '@core/interfaces/training';
 import { User } from '@core/interfaces/user';
 import * as moment from 'moment';
@@ -39,7 +40,7 @@ export class TrainingService {
     const start = page * results;
     try {
       const res = await firstValueFrom(
-        this._http.get<any[]>(environment.apiUrl + `/training?$top=${results}&$skip=${start}`)
+        this._http.get<any[]>(environment.apiUrl + `/training?$top=${results}&$skip=${start}&$orderby=expired,start`)
       );
       if (res) {
         const trainingList = res.map(apiElm => {
@@ -116,6 +117,7 @@ export class TrainingService {
       return this.handleError(e);
     }
   }
+  
 
   async apply(trainingId: number): Promise<boolean | string> {
     try {
@@ -169,6 +171,7 @@ export class TrainingService {
       return this.handleError(e);
     }
   }
+
 
   async getTrainingRegistrationStatusList(): Promise<Status[] | string> {
     try {

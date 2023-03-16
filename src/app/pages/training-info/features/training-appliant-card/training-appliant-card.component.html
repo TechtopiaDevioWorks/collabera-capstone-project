@@ -81,9 +81,17 @@
     </div>
     <footer class="card-footer">
       <ng-container [ngSwitch]="currentUser?.role?.id">
+        <ng-container *ngSwitchCase="1">
+          <a class="card-footer-item" (click)="onViewFeedback()">View feedback</a>
+        </ng-container>
         <ng-container *ngSwitchCase="2">
+          <a class="card-footer-item" (click)="onViewFeedback()">View feedback</a>
           <a class="card-footer-item" (click)="onDelete()">Delete</a>
         </ng-container>
+        <ng-container *ngSwitchCase="3">
+          <a class="card-footer-item" (click)="onViewFeedback()">View feedback</a>
+        </ng-container>
+
       </ng-container>
     </footer>
   </div>

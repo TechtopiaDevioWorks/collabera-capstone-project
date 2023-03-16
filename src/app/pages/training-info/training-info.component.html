@@ -28,6 +28,11 @@
         <div class="content">
           <p class="subtitle is-6">{{ training.description }}</p>
         </div>
+        <div class="">
+          <button class="button is-outlined m-auto" (click)="onViewFeedback()" *ngIf="currentUser?.role?.id === 2 || currentUser?.role?.id === 3">
+            View feedback
+          </button>
+        </div>
       </div>
     </div>
   </section>

@@ -12,7 +12,9 @@
   margin-top: auto;
   .disabled {
     pointer-events: none;
-    opacity: 0.25;
+    .card-footer-item-button {
+      opacity: 0.25;
+    }
   }
 
   .span-disabled {
@@ -26,7 +28,7 @@
   }
   .card-footer {
     pointer-events: none;
-    opacity: 0.25;
+    opacity: 0.05;
   }
   cursor: not-allowed;
 }

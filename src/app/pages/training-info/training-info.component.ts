@@ -1,11 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Feedback } from '@core/interfaces/feedback';
 import { Status, Training, TrainingRegistrationMax } from '@core/interfaces/training';
 import { User } from '@core/interfaces/user';
+import { FeedbackService } from '@core/services/feedback.service';
 import { TrainingService } from '@core/services/training.service';
 import { UserService } from '@core/services/user.service';
+import { FeedbackDialogComponent } from '@shared/feedback-dialog/feedback-dialog.component';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -25,7 +30,10 @@ export class TrainingInfoComponent implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _user: UserService,
-    private _training: TrainingService
+    private _training: TrainingService,
+    private _feedback: FeedbackService,
+    private _toast: ToastrService,
+    private dialog: MatDialog
   ) {}
   ngOnInit(): void {
     this.initUser();
@@ -79,7 +87,36 @@ export class TrainingInfoComponent implements OnInit, OnDestroy {
     }
   }
  
-  
+  async onViewFeedback() {
+    if (!this.training) return;
+    const res = await this._feedback.getFeedbackList(
+      1,
+      null,
+      this.training.id
+
+    );
+    if (typeof res === 'string') {
+      this._toast.warning(`Error! ${res}`);
+      return;
+    } else {
+      let message = '';
+      if(res.length === 0) {
+        this._toast.warning(`No feedback available!`);
+      return;
+      }
+      for(const feedback of res) {
+        message+=`From ${feedback.fromUser.firstname} ${feedback.fromUser.lastname} (${feedback.fromUser.username}): ${feedback.message} \n`
+      }
+      this.dialog.open(FeedbackDialogComponent, {
+        data: {
+          title: 'Training feedback',
+          subtitle: null,
+          editable: false,
+          message: message,
+        },
+      });
+    }
+  }
 
   ngOnDestroy(): void {
     if (this.routeParamSubscription) {

@@ -35,7 +35,7 @@
 <div mat-dialog-actions>
   <button class="button is-link m-auto" [mat-dialog-close]="false">Cancel</button>
 
-  <button
+  <button *ngIf="data.editable"
     class="button is-primary m-auto"
     [disabled]="
 			this.messageForm.pristine || this.messageForm.invalid

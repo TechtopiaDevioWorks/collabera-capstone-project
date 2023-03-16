@@ -19,5 +19,12 @@ export class FeedbackDialogComponent {
       message: string;
       editable: boolean;
     }
-  ) {}
+  ) {
+    if(data.editable === false) {
+      this.messageForm.get('message')?.disable();
+    } 
+    if(data.message) {
+      this.messageForm.get('message')?.setValue(data.message);
+    }
+  }
 }
