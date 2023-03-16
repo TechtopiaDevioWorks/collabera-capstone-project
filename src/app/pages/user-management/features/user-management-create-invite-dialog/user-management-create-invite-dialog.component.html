@@ -1,0 +1,78 @@
+<h1 mat-dialog-title>Invite user</h1>
+<div mat-dialog-content>
+    <div class="container m-auto p-2">
+        <form [formGroup]="inviteForm">
+            <!--Email-->
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="email"
+                        placeholder="john.doe@company.com"
+                        formControlName="email"
+                        [class.is-danger]="this.inviteForm.get('email')?.errors && !this.inviteForm.get('email')?.pristine" />
+                </div>
+                <p
+                    class="help is-danger"
+                    *ngIf="!this.inviteForm.get('email')?.pristine && this.inviteForm.get('email')?.hasError('required')">
+                    Email is required.
+                </p>
+                <p
+                    class="help is-danger"
+                    *ngIf="!this.inviteForm.get('email')?.pristine && this.inviteForm.get('email')?.hasError('email')">
+                    Email is invalid.
+                </p>
+            </div>
+            <!--Role-->
+            <div class="field">
+                <label class="label">Role</label>
+                <div class="control">
+                    <div class="select">
+                        <select formControlName="role">
+                            <option *ngFor="let item of roleList" [ngValue]="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <p
+                    class="help is-danger"
+                    *ngIf="!this.inviteForm.get('role')?.pristine && this.inviteForm.get('role')?.hasError('required')">
+                    Role is required.
+                </p>
+            </div>
+            <!--Team-->
+            <div class="field">
+                <label class="label">Team</label>
+                <div class="control">
+                    <div class="select">
+                        <select formControlName="team">
+                            <option *ngFor="let item of teamList" [ngValue]="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <p
+                    class="help is-danger"
+                    *ngIf="!this.inviteForm.get('team')?.pristine && this.inviteForm.get('team')?.hasError('requiredNotHr')">
+                    Team is required for non HR roles.
+                </p>
+            </div>
+            <p class="help is-danger" *ngIf="requestError">
+                {{ requestError }}
+              </p>
+        </form>
+    </div>    
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" mat-dialog-close>Cancel</button>
+
+  <button
+    class="button is-primary m-auto"
+    [class.is-loading]="requestLoading"
+    [disabled]="
+			this.inviteForm.pristine || this.inviteForm.invalid
+		"
+    (click)="onSubmitClick()"
+  >
+    Invite
+  </button>
+</div>

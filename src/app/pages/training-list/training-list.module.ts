@@ -9,6 +9,7 @@ import { TrainingCardComponent } from './features/training-card/training-card.co
 import { CoreModule } from '@core/core.module';
 import { TrainingDeleteDialogComponent } from './features/training-delete-dialog/training-delete-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { TrainingApplyDialogComponent } from './features/training-apply-dialog/training-apply-dialog.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     TrainingListFilterComponent,
     TrainingCardComponent,
     TrainingDeleteDialogComponent,
+    TrainingApplyDialogComponent,
   ],
   imports: [
     CommonModule,

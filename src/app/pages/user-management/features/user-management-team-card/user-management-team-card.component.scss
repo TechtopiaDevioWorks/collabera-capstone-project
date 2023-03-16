@@ -1,0 +1,15 @@
+a.disabled {
+    color: hsl(0, 0%, 86%);
+    box-shadow: none;
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+:host {
+    margin: 1rem;
+}
+
+.card {
+    min-width: 300px;
+}

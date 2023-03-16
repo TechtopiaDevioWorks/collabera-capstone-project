@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p class="subtitle is-6">{{data.message}}</p>
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" [mat-dialog-close]="false">Cancel</button>
+
+  <button
+    class="button is-primary m-auto"
+    [mat-dialog-close]="true">
+    Confirm
+  </button>
+</div>

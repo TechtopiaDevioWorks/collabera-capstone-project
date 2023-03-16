@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MinUser } from '@core/interfaces/user';
+import { Invite, MinUser, Team } from '@core/interfaces/user';
 import { UserService } from '@core/services/user.service';
-import { UserManagementInviteCardComponent } from './features/user-management-invite-card/user-management-invite-card.component';
+import { firstValueFrom } from 'rxjs';
+import { UserManagementCreateInviteDialogComponent } from './features/user-management-create-invite-dialog/user-management-create-invite-dialog.component';
+import { UserManagementCreateTeamComponent } from './features/user-management-create-team/user-management-create-team.component';
 
 @Component({
   selector: 'app-user-management',
@@ -12,11 +14,14 @@ import { UserManagementInviteCardComponent } from './features/user-management-in
 })
 export class UserManagementComponent implements OnInit{
   userList: MinUser[] = [];
+  inviteList: Invite[] = [];
   currentUser: MinUser | null = null;
   userRoleId: number | null = null;
+  teamList: Team[] = [];
   pageSize = 10;
   pageNumber = 0;
-  userListLength = 0;
+  listLength = 0;
+  selectedTab: 'Users'|'Invites'|'Teams' ='Users';
 
   constructor(private _user: UserService, public dialog: MatDialog){}
 
@@ -33,17 +38,68 @@ export class UserManagementComponent implements OnInit{
       //err
     } else {
       this.userList = res;
-      this.userListLength = res.length;
+      this.listLength = res.length;
+    }
+
+  }
+
+  async initTeamList() {
+    if(this.userRoleId !== 3) return;
+    const teamList = await this._user.getTeamList();
+    if (typeof teamList === 'string') {
+      console.error(teamList);
+    } else {
+      this.teamList = teamList;
+      this.listLength = teamList.length;
     }
   }
+
+  async initInviteList() {
+    if(this.userRoleId !== 3) return;
+    const inviteList = await this._user.getInviteList();
+    if (typeof inviteList === 'string') {
+      console.error(inviteList);
+    } else {
+      this.inviteList = inviteList;
+      this.listLength = inviteList.length;
+    }
+  }
+
   onPaginatorChange(e: PageEvent) {
     this.pageNumber = e.pageIndex;
     this.pageSize = e.pageSize;
     //this.refreshList();
   }
 
-  onInviteClick() {
-    this.dialog.open(UserManagementInviteCardComponent, {
-    })
+  async onInviteClick() {
+    const res = await firstValueFrom(this.dialog.open(UserManagementCreateInviteDialogComponent, {
+    }).afterClosed());
+    if (res === true) this.refreshList('Invites');
+  }
+
+  async onCreateTeamClick() {
+    const res = await firstValueFrom(this.dialog.open(UserManagementCreateTeamComponent, {}).afterClosed());
+    if (res === true) this.refreshList('Teams');
+  }
+
+  refreshList(tabName: 'Users'|'Invites'|'Teams') {
+    if(this.selectedTab !== tabName) return;
+    switch(tabName) {
+      case 'Users':
+        this.initUserList();
+        break;
+      case 'Invites':
+        this.initInviteList();
+        break;
+      case 'Teams':
+        this.initTeamList();
+        break;
+    }
+  }
+
+  changeTab(tabName: 'Users'|'Invites'|'Teams') {
+    this.selectedTab = tabName;
+    this.pageNumber = 0;
+    this.refreshList(tabName);
   }
 }

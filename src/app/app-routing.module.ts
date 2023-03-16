@@ -40,10 +40,22 @@ const routes: Routes = [
     canMatch: [LoggedinGuard],
   },
   {
-    path: 'training',
+    path: 'training-info',
     loadChildren: () =>
       import('./pages/training-info/training-info.module').then((m) => m.TrainingInfoModule),
     canMatch: [LoggedinGuard],
+  },
+  {
+    path: 'training-edit',
+    loadChildren: () =>
+      import('./pages/training-edit/training-edit.module').then((m) => m.TrainingEditModule),
+    canMatch: [LoggedinGuard, HrOrManagerGuard],
+  },
+  {
+    path: 'training-new',
+    loadChildren: () =>
+      import('./pages/training-new/training-new.module').then((m) => m.TrainingNewModule),
+    canMatch: [LoggedinGuard, HrOrManagerGuard],
   },
   {
     path: 'profile',

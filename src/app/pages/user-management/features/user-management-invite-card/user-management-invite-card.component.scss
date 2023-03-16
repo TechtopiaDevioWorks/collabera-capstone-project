@@ -1,4 +1,13 @@
 :host {
-    width: 280px;
-    display: block;
+    padding: 15px;
+}
+.card {
+    width: 300px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+}
+.card-footer {
+    margin-top: auto;
 }

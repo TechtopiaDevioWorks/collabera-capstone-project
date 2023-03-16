@@ -1,0 +1,13 @@
+<div class="card" *ngIf="team">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-6 has-text-centered">{{ team.name }}</p>
+        </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+        <a class="card-footer-item" (click)="onDeleteClick()"  [class.is-loading]="requestLoading">Delete</a>
+    </footer>
+  </div>
+  

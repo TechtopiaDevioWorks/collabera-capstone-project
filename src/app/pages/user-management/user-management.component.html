@@ -2,23 +2,47 @@
 	<section class="section filter-section">
 		<!--<app-user-management-filter></app-user-management-filter>-->
 		<div class="hr-control" *ngIf="userRoleId === 3">
-			<div class="field is-flex">
+			<div class="is-flex m-2">
 				<button class="button is-outlined m-auto" (click)="onInviteClick()">
 					Invite user
 				</button>
 			</div>
+			<div class="is-flex m-2">
+				<button class="button is-outlined m-auto" (click)="onCreateTeamClick()">
+					Create team
+				</button>
+			</div>
 		</div>
 	</section>
+	<div class="tabs is-centered" *ngIf="userRoleId === 3">
+		<ul>
+		  <li [class.is-active]="selectedTab==='Users'" (click)="changeTab('Users')"><a>Users</a></li>
+		  <li [class.is-active]="selectedTab==='Invites'" (click)="changeTab('Invites')"><a>Invites</a></li>
+		  <li [class.is-active]="selectedTab==='Teams'" (click)="changeTab('Teams')"><a>Teams</a></li>
+		</ul>
+	</div>
 	<mat-paginator
-		[length]="userListLength"
+		[length]="listLength"
 		[pageSize]="pageSize"
 		(page)="onPaginatorChange($event)"
 		[pageSizeOptions]="[5, 10, 25]"
 		aria-label="Select page">
 	</mat-paginator>
 	<div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around">
-        <ng-container *ngFor="let item of userList">
-            <app-user-management-card [user]="item" [manager]="currentUser" *ngIf="currentUser?.id !== item.id"></app-user-management-card>
-        </ng-container>
+        <ng-container *ngIf="selectedTab==='Users'">
+			<ng-container *ngFor="let item of userList">
+				<app-user-management-card [user]="item" [manager]="currentUser"></app-user-management-card>
+			</ng-container>
+		</ng-container>
+		<ng-container *ngIf="selectedTab==='Invites'">
+			<ng-container *ngFor="let item of inviteList">
+				<app-user-management-invite-card [invite]="item" (refreshRequired)="refreshList('Invites')"></app-user-management-invite-card>
+			</ng-container>	
+		</ng-container>
+		<ng-container *ngIf="selectedTab==='Teams'">
+			<ng-container *ngFor="let item of teamList">
+				<app-user-management-team-card [team]="item" (refreshRequired)="refreshList('Teams')"></app-user-management-team-card>
+			</ng-container>
+		</ng-container>
 	</div>
 </div>

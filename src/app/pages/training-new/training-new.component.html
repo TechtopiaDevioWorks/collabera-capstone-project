@@ -1,0 +1,105 @@
+<div class="container is-max-desktop m-auto p-2">
+	<form [formGroup]="trainingForm" (ngSubmit)="onSubmit()">
+		<!--Username-->
+		<div class="field">
+			<label class="label">Title</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="Training title"
+					formControlName="title"
+					[class.is-danger]="this.trainingForm.get('title')?.errors && !this.trainingForm.get('title')?.pristine" />
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.trainingForm.get('title')?.pristine && this.trainingForm.get('title')?.hasError('required')">
+				Title is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.trainingForm.get('title')?.pristine &&
+					(this.trainingForm.get('title')?.hasError('maxlength') ||
+						this.trainingForm.get('title')?.hasError('minlength'))
+				">
+				Title must be between 2 and 50 characters.
+			</p>
+		</div>
+		<!--Firstname-->
+		<div class="field">
+			<label class="label">Description</label>
+			<div class="control">
+				<input
+					class="input"
+					type="text"
+					placeholder="Training description"
+					formControlName="description"
+					[class.is-danger]="
+						this.trainingForm.get('description')?.errors && !this.trainingForm.get('description')?.pristine
+					" />
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.trainingForm.get('description')?.pristine && this.trainingForm.get('description')?.hasError('required')">
+				Description is required.
+			</p>
+			<p
+				class="help is-danger"
+				*ngIf="
+					!this.trainingForm.get('description')?.pristine &&
+					(this.trainingForm.get('description')?.hasError('maxlength') ||
+						this.trainingForm.get('description')?.hasError('minlength'))
+				">
+				Description must be between 2 and 255 characters.
+			</p>
+		</div>
+        <div class="field">
+            <label class="label">Date range</label>
+            <div class="control">
+                <mat-date-range-input [rangePicker]="picker" formGroupName="dateRange" class="input datepicker-range" [min]="minDate">
+                    <input matStartDate formControlName="startDate" placeholder="Start Date">
+                    <input matEndDate formControlName="endDate" placeholder="End Date">
+                </mat-date-range-input>
+
+                    <span class="datepicker-icon icon is-small is-left">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                         <mat-date-range-picker #picker></mat-date-range-picker>
+                    </span>
+
+            </div>
+        </div>
+		<!--Min hours-->
+		<div class="field">
+			<label class="label">Minimum hours to pass</label>
+			<div class="control">
+				<input
+					class="input"
+					type="number"
+					placeholder="20"
+					formControlName="minHours"
+					[class.is-danger]="this.trainingForm.get('minHours')?.errors && !this.trainingForm.get('minHours')?.pristine" />
+			</div>
+			<p
+				class="help is-danger"
+				*ngIf="!this.trainingForm.get('minHours')?.pristine && this.trainingForm.get('minHours')?.hasError('required')">
+				Minium hours field is required.
+			</p>
+		</div>
+        <div class="field is-grouped is-flex-direction-column">
+            <div class="control is-flex m-2">
+              <button
+                type="submit"
+                class="button is-primary m-auto"
+                [disabled]="!trainingForm.valid"
+                [class.is-loading]="requestLoading"
+              >
+                Create
+              </button>
+            </div>
+            <p class="help is-danger" *ngIf="requestError">
+              {{ requestError }}
+            </p>
+          </div>
+	</form>
+</div>

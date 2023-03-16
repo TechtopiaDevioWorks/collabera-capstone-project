@@ -2,8 +2,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   MinTraining,
+  NewTraining,
+  Status,
   Training,
   TrainingFilter,
+  TrainingRegistrationMax,
 } from '@core/interfaces/training';
 import { User } from '@core/interfaces/user';
 import * as moment from 'moment';
@@ -17,35 +20,9 @@ import { UserService } from './user.service';
 })
 export class TrainingService {
 
-  dummyTrainingList: Training[] =[];
-
-  private latestTrainingFilteredList: Training[] | MinTraining[] = [];
-  private latestTrainingFilter: string | null = null;
 
   constructor(private _user: UserService, private _http: HttpClient) {
     const currentMoment = moment.utc();
-    this.dummyTrainingList.sort((a, b) => {
-      if (
-        a.endDate.isAfter(currentMoment) &&
-        b.endDate.isAfter(currentMoment)
-      ) {
-        if (a.startDate.isAfter(b.startDate)) {
-          return 1;
-        } else {
-          return -1;
-        }
-      } else if (a.endDate.isAfter(currentMoment)) {
-        return -1;
-      } else if (b.endDate.isAfter(currentMoment)) {
-        return 1;
-      } else {
-        if (a.startDate.isAfter(b.startDate)) {
-          return 1;
-        } else {
-          return -1;
-        }
-      }
-    });
   }
 
   async getTrainingList(
@@ -54,98 +31,19 @@ export class TrainingService {
     applicants: true | null = null,
     results: number = 10,
     page: number = 0
-  ): Promise<MinTraining[] | Training[]> {
+  ): Promise<MinTraining[] | string> {
     const filter: TrainingFilter = {};
-    const userRole = await this._user.getUserRole();
-    const userRoleId = userRole ? userRole.id : null;
     if (minDate) filter.minDate = minDate;
     if (maxDate) filter.maxDate = maxDate;
     if (applicants) filter.applicants = applicants;
-    if (
-      this.latestTrainingFilter === JSON.stringify(filter) &&
-      this.latestTrainingFilteredList &&
-      this.latestTrainingFilteredList.length > 0
-    ) {
-    } else {
-      await this.refreshTrainingList();
-      const filteredList = this.dummyTrainingList.filter((training) => {
-        return Object.keys(filter).every((key) => {
-          if (filter[key] === null) return true;
-          if (key === 'minDate') {
-            return training.startDate.isAfter(filter.minDate);
-          } else if (key === 'maxDate') {
-            return training.endDate.isBefore(filter.maxDate);
-          } else if (key === 'applicants') {
-            return training?.applicants?.length > 0;
-          } else return true;
-        });
-      });
-      if (userRoleId === 1) {
-        this.latestTrainingFilteredList = filteredList.map((e) => {
-          const eNew: MinTraining = e;
-          return eNew;
-        });
-      } else {
-        this.latestTrainingFilteredList = filteredList;
-      }
-      this.latestTrainingFilter = JSON.stringify(filter);
-    }
     const start = page * results;
-    const end = start + results;
-    return this.latestTrainingFilteredList.slice(start, end);
-  }
-
-  async getTrainingListLength(
-    minDate: Moment | null = null,
-    maxDate: Moment | null = null,
-    applicants: true | null = null
-  ): Promise<number> {
-    const filter: TrainingFilter = {};
-    const userRole = await this._user.getUserRole();
-    const userRoleId = userRole ? userRole.id : null;
-    if (minDate) filter.minDate = minDate;
-    if (maxDate) filter.maxDate = maxDate;
-    if (applicants) filter.applicants = applicants;
-    if (
-      this.latestTrainingFilter === JSON.stringify(filter) &&
-      this.latestTrainingFilteredList &&
-      this.latestTrainingFilteredList.length > 0
-    ) {
-    } else {
-      await this.refreshTrainingList();
-      const filteredList = this.dummyTrainingList.filter((training) => {
-        return Object.keys(filter).every((key) => {
-          if (filter[key] === null) return true;
-          if (key === 'minDate') {
-            return training.startDate.isAfter(filter.minDate);
-          } else if (key === 'maxDate') {
-            return training.endDate.isBefore(filter.maxDate);
-          } else if (key === 'applicants') {
-            return training?.applicants?.length > 0;
-          } else return true;
-        });
-      });
-      if (userRoleId === 1) {
-        this.latestTrainingFilteredList = filteredList.map((e) => {
-          const eNew: MinTraining = e;
-          return eNew;
-        });
-      } else {
-        this.latestTrainingFilteredList = filteredList;
-      }
-      this.latestTrainingFilter = JSON.stringify(filter);
-    }
-    return this.latestTrainingFilteredList.length;
-  }
-
-  private async refreshTrainingList(): Promise<true | string> {
     try {
       const res = await firstValueFrom(
-				this._http.get<any[]>(environment.apiUrl + `/training`)
-			);
+        this._http.get<any[]>(environment.apiUrl + `/training?$top=${results}&$skip=${start}`)
+      );
       if (res) {
-        this.dummyTrainingList = res.map(apiElm => {
-          const elm: Training = {
+        const trainingList = res.map(apiElm => {
+          const elm: MinTraining = {
             id: apiElm.id,
             title: apiElm.name,
             description: apiElm.description,
@@ -153,14 +51,38 @@ export class TrainingService {
             status: apiElm.status,
             startDate: moment(apiElm.start),
             endDate: moment(apiElm.end),
-            applicants: []
+            noapplicants: apiElm.noTrainingRegistrations
           }
           return elm;
         })
-        return true;
+        return trainingList;
       }
       return 'Unexpected error occured. Try again!';
     } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+  async getTrainingListLength(
+    minDate: Moment | null = null,
+    maxDate: Moment | null = null,
+    applicants: true | null = null
+  ): Promise<number | string> {
+    const filter: TrainingFilter = {};
+    if (minDate) filter.minDate = minDate;
+    if (maxDate) filter.maxDate = maxDate;
+    if (applicants) filter.applicants = applicants;
+    try {
+      const res = await firstValueFrom(
+        this._http.get<number>(environment.apiUrl + `/training/count`)
+      );
+      if (res) {
+        return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
       return this.handleError(e);
     }
   }
@@ -172,6 +94,110 @@ export class TrainingService {
       );
       if (res) {
         console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async deleteRegistration(registrationId: number): Promise<boolean | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.delete<any>(environment.apiUrl + `/training-registration/${registrationId}`)
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async apply(trainingId: number): Promise<boolean | string> {
+    try {
+      const user = this._user.getUserInfo();
+      if(!user) return "Can't indentify user.";
+      if(user.role.id !== 1) return "Your user role can't apply for training.";
+      const body = {
+        user_id: user.id,
+        training_id: trainingId
+      }
+      const res = await firstValueFrom(
+        this._http.post<any>(environment.apiUrl + `/training-registration/`, body)
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async getTrainingRegistrationList(trainingId: number): Promise<TrainingRegistrationMax[] | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.get<any[]>(environment.apiUrl + `/training-registration/training/${trainingId}?expand=true`)
+      );
+      if (res) {
+        const trRegList: TrainingRegistrationMax[] = res.map(apiElm => {
+          const trReg: TrainingRegistrationMax = {
+            id: apiElm.id,
+            registration_date: moment(apiElm.registration_date),
+            status: apiElm.status,
+            user: apiElm.user,
+            training: {id: apiElm.training.id,
+            title: apiElm.training.name,
+            description: apiElm.training.description,
+            duration: apiElm.training.min_hours,
+            status: apiElm.training.status,
+            startDate: moment(apiElm.training.start),
+            endDate: moment(apiElm.training.end),
+            }
+          }
+          return trReg;
+        })
+        return trRegList;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async getTrainingRegistrationStatusList(): Promise<Status[] | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.get<Status[]>(environment.apiUrl + `/training-registration-status`)
+      );
+      if (res) {
+        return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async updateTrainingRegistrationStatus(
+    trainingRegistrationId: number,
+    statusId: number
+  ): Promise<boolean | string> {
+    try {
+      const body = {status_id: statusId};
+      const res = await firstValueFrom(
+        this._http.put<any>(
+          environment.apiUrl +
+            `/training-registration/${trainingRegistrationId}`,
+          body
+        )
+      );
+      if (res) {
         return true;
       }
       return 'Unexpected error occured. Try again!';
@@ -202,6 +228,83 @@ export class TrainingService {
       return 'Unexpected error occured. Try again!';
     } catch (e) {
       console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+  async updateTrainingField(
+    trainingId: number,
+    fieldName: string,
+    value: string | number | Moment
+  ): Promise<boolean | string> {
+    try {
+      switch(fieldName) {
+        case 'title':
+          fieldName = 'name';
+          break;
+        case 'minHours':
+          fieldName = 'min_hours';
+          break;
+      }
+      const body = {};
+      Object.defineProperty(body, fieldName, {
+        value: value,
+        enumerable: true,
+      });
+      const res = await firstValueFrom(
+        this._http.put<Training>(
+          environment.apiUrl +
+            `/training/${trainingId}`,
+          body
+        )
+      );
+      if (res) {
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async updateTrainingDate(
+    trainingId: number,
+    valuestart: Moment,
+    valueEnd: Moment
+  ): Promise<boolean | string> {
+    try {
+      const body = {
+        start: valuestart.utc(true).startOf('d').toISOString(),
+        end: valueEnd.utc(true).startOf('d').toISOString(),
+      };
+      console.log(body);
+      const res = await firstValueFrom(
+        this._http.put<Training>(
+          environment.apiUrl +
+            `/training/${trainingId}`,
+          body
+        )
+      );
+      if (res) {
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async create(newTraining: NewTraining): Promise<boolean | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.post<any>(environment.apiUrl + `/training`, newTraining)
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
       return this.handleError(e);
     }
   }

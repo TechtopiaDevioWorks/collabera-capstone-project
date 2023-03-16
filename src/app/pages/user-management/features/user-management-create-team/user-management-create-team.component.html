@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Create team</h1>
+<div mat-dialog-content>
+    <div class="container m-auto p-2">
+        <form [formGroup]="teamForm">
+            <!--Name-->
+            <div class="field">
+                <label class="label">Team name</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="text"
+                        placeholder="Team 1"
+                        formControlName="teamname"
+                        [class.is-danger]="this.teamForm.get('teamname')?.errors && !this.teamForm.get('teamname')?.pristine" />
+                </div>
+                <p
+                    class="help is-danger"
+                    *ngIf="!this.teamForm.get('teamname')?.pristine && this.teamForm.get('teamname')?.hasError('required')">
+                    Team name is required.
+                </p>
+                <p
+                class="help is-danger"
+                *ngIf="
+                  !this.teamForm.get('teamname')?.pristine &&
+                  (this.teamForm.get('teamname')?.hasError('maxlength') ||
+                    this.teamForm.get('teamname')?.hasError('minlength'))
+                "
+              >
+                Team name must be between 2 and 25 characters.
+              </p>
+            </div>
+            <p class="help is-danger" *ngIf="requestError">
+                {{ requestError }}
+              </p>
+        </form>
+    </div>    
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" mat-dialog-close>Cancel</button>
+
+  <button
+    class="button is-primary m-auto"
+    [class.is-loading]="requestLoading"
+    [disabled]="
+			this.teamForm.pristine || this.teamForm.invalid
+		"
+    (click)="onSubmitClick()"
+  >
+    Create
+  </button>
+</div>

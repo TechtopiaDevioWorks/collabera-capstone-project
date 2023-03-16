@@ -14,6 +14,10 @@ import { UserManagementTrainingHistoryComponent } from './features/user-manageme
 import { UserManagementInviteCardComponent } from './features/user-management-invite-card/user-management-invite-card.component';
 import { UserManagementInviteInfoCardComponent } from './features/user-management-invite-info-card/user-management-invite-info-card.component';
 import { PastTrainingListModule } from '@shared/past-training-list/past-training-list.module';
+import { UserManagementCreateTeamComponent } from './features/user-management-create-team/user-management-create-team.component';
+import { SimpleConfirmationDialogModule } from '@shared/simple-confirmation-dialog/simple-confirmation-dialog.module';
+import { UserManagementTeamCardComponent } from './features/user-management-team-card/user-management-team-card.component';
+import { UserManagementCreateInviteDialogComponent } from './features/user-management-create-invite-dialog/user-management-create-invite-dialog.component';
 
 
 @NgModule({
@@ -25,7 +29,10 @@ import { PastTrainingListModule } from '@shared/past-training-list/past-training
     UserManagementEditUserComponent,
     UserManagementTrainingHistoryComponent,
     UserManagementInviteCardComponent,
-    UserManagementInviteInfoCardComponent
+    UserManagementInviteInfoCardComponent,
+    UserManagementCreateTeamComponent,
+    UserManagementTeamCardComponent,
+    UserManagementCreateInviteDialogComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +40,8 @@ import { PastTrainingListModule } from '@shared/past-training-list/past-training
     CoreModule,
     MatPaginatorModule,
     MatDialogModule,
-    PastTrainingListModule
+    PastTrainingListModule,
+    SimpleConfirmationDialogModule
   ],
   providers: [MatDialog]
 })

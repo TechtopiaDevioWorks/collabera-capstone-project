@@ -149,6 +149,51 @@ export class UserService {
     }
   }
 
+  async createTeam(teamname: string): Promise<boolean | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.post<any>(environment.apiUrl + `/team`, {name: teamname})
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async deleteInvite(inviteId: number): Promise<boolean | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.delete<any>(environment.apiUrl + `/invite/${inviteId}`)
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
+  async deleteTeam(teamid: number): Promise<boolean | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.delete<any>(environment.apiUrl + `/team/${teamid}`)
+      );
+      if (res) {
+        console.log(res);
+        return true;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      return this.handleError(e);
+    }
+  }
+
   async delete(userId: number): Promise<boolean | string> {
     try {
       if (userId === this._user?.id) return "Can't delete your own user!";
@@ -281,6 +326,21 @@ export class UserService {
     try {
       const res = await firstValueFrom(
         this._http.get<Team[]>(environment.apiUrl + `/team`)
+      );
+      if (res) {
+        return res;
+      }
+      return 'Unexpected error occured. Try again!';
+    } catch (e) {
+      console.log(e);
+      return this.handleError(e);
+    }
+  }
+
+  async getInviteList(): Promise<Invite[] | string> {
+    try {
+      const res = await firstValueFrom(
+        this._http.get<Invite[]>(environment.apiUrl + `/invite`)
       );
       if (res) {
         return res;

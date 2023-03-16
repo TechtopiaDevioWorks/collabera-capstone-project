@@ -1,6 +1,14 @@
 import { Moment } from 'moment';
 import { MinUser } from './user';
 
+export interface NewTraining {
+  name: string;
+  description: string;
+  start: string;
+  end: string;
+  min_hours: number;
+}
+
 export interface MinTraining {
   id: number;
   title: string;
@@ -9,6 +17,7 @@ export interface MinTraining {
   endDate: Moment;
   duration: number;
   status:Status;
+  noapplicants?: number;
 }
 
 export interface Training extends MinTraining {

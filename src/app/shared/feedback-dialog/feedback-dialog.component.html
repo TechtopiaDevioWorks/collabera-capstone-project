@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p class="subtitle is-6" *ngIf="data.subtitle">{{data.subtitle}}</p>
+  <div class="container m-auto p-2">
+    <form [formGroup]="messageForm">
+
+    <div class="field">
+        <label class="label">Message</label>
+        <div class="control">
+            <textarea
+                class="textarea is-small"
+                placeholder="Message"
+                formControlName="message"
+                [class.is-danger]="messageForm.get('message')?.errors && !messageForm.get('message')?.pristine"></textarea>
+        </div>
+        <p
+            class="help is-danger"
+            *ngIf="!messageForm.get('message')?.pristine && messageForm.get('message')?.hasError('required')">
+            Message is required.
+        </p>
+        <p
+        class="help is-danger"
+        *ngIf="
+            !messageForm.get('message')?.pristine &&
+            (messageForm.get('message')?.hasError('maxlength') ||
+            messageForm.get('message')?.hasError('minlength'))
+        "
+        >
+        Message must be between 1 and 500 characters.
+        </p>
+    </div>
+    </form>
+</div>
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" [mat-dialog-close]="false">Cancel</button>
+
+  <button
+    class="button is-primary m-auto"
+    [disabled]="
+			this.messageForm.pristine || this.messageForm.invalid
+		"
+    [mat-dialog-close]="messageForm.get('message')?.value">
+    Confirm
+  </button>
+</div>

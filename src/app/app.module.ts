@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from '@core/services/user.service';
 import { LayoutModule } from '@features/layout/layout.module';
 import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
 } from '@angular/material-moment-adapter';
@@ -18,6 +19,9 @@ import {
 import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenAuthInterceptor } from '@core/interceptors/token-auth.interceptor';
+import { TrainingService } from '@core/services/training.service';
+import { FeedbackService } from '@core/services/feedback.service';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -36,12 +40,15 @@ import { TokenAuthInterceptor } from '@core/interceptors/token-auth.interceptor'
   ],
   providers: [
     UserService,
+    TrainingService,
+    FeedbackService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenAuthInterceptor,

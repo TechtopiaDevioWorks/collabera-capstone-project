@@ -1,4 +1,4 @@
-<div class="card" *ngIf="training" [class.training-expired]="expired">
+<div class="card" *ngIf="training" [class.training-expired]="expired && userRoleId === 1">
   <span title="Badge top center" class="badge is-top is-warning" *ngIf="expired">Training expired</span>
   <!--<span title="Badge top center" class="badge badge-big is-top is-primary" *ngIf="userRoleId === 1 && training.state && !expired">{{training.state | titlecase}}</span>-->
     <div class="card-content">
@@ -27,14 +27,18 @@
     <footer class="card-footer">
       <ng-container [ngSwitch]="userRoleId">
         <ng-container *ngSwitchCase="1">
-          <a class="card-footer-item" (click)="applyTraining.next(training.id)">Apply</a>
+          <a class="card-footer-item" (click)="onApplyClick()">Apply</a>
         </ng-container>
         <ng-container *ngSwitchCase="2">
-          <a class="card-footer-item" (click)="infoTraining.next(training.id)">Applicants</a>
+          <a class="card-footer-item" [routerLink]="['/training-info', training.id]" [class.disabled]="!training.noapplicants">
+            <span title="Badge top center" class="badge is-top is-primary" *ngIf="training.noapplicants">Applicants {{training.noapplicants}}</span>
+            <span [class.span-disabled]="!training.noapplicants">Applicants</span></a>
         </ng-container>
         <ng-container *ngSwitchCase="3">
-          <a class="card-footer-item" [routerLink]="['/training', training.id]">Info</a>
-          <a class="card-footer-item" [routerLink]="['/training', training.id]" [queryParams]="{edit: true}">Edit</a>
+          <a class="card-footer-item" [routerLink]="['/training-info', training.id]">
+            <span title="Badge top center" class="badge is-top is-primary" *ngIf="training.noapplicants">Applicants {{training.noapplicants}}</span>
+            <span>Info</span></a>
+          <a class="card-footer-item" [routerLink]="['/training-edit', training.id]">Edit</a>
           <a class="card-footer-item" (click)="onDeleteClick()">Delete</a>
         </ng-container>
       </ng-container>

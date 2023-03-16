@@ -1,0 +1,90 @@
+<div class="card" *ngIf="appliance">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-6">{{ appliance.user.firstname }} {{ appliance.user.lastname }}</p>
+          <div class="is-flex">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Username:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ appliance.user.username }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex" *ngIf="currentUser?.team?.id !== appliance.user.team?.id">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Team:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ appliance.user.team?.name }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex" *ngIf="currentUser?.role?.id === 3">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Status:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ appliance.status.name }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex mt-2" *ngIf="currentUser?.role?.id === 2">
+            <div class="field w-100">
+                <label class="label">Status</label>
+                <div class="control">
+                    <div class="select">
+                        <select [formControl]="statusForm">
+                            <option *ngFor="let item of statusList" [ngValue]="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                
+                <ng-container *ngIf="!editMode">
+                <button class="button is-outlined ml-2" (click)="onEditClick()" [disabled]="editMode" >
+                    <span class="icon is-small">
+                        <i class="fas fa-pen"></i>
+                    </span>
+                </button>
+                </ng-container>
+                <ng-container *ngIf="editMode">
+                    <button
+                        class="button is-outlined ml-2"
+                        [disabled]="
+                            !this.statusForm.value ||
+                            this.statusForm.pristine || this.statusForm.invalid
+                        "
+                        (click)="onSaveEdit()" [class.is-loading]="this.requestLoading">
+                        <span class="icon is-small">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </button>
+                    <button class="button is-outlined ml-2" (click)="onCancelEdit()" [disabled]="this.requestLoading">
+                        <span class="icon is-small">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    </button>
+                </ng-container>
+              </div>
+                <p
+                    class="help is-danger"
+                    *ngIf="!this.statusForm.pristine && this.statusForm.hasError('required')">
+                    Status is required.
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <ng-container [ngSwitch]="currentUser?.role?.id">
+        <ng-container *ngSwitchCase="2">
+          <a class="card-footer-item" (click)="onDelete()">Delete</a>
+        </ng-container>
+      </ng-container>
+    </footer>
+  </div>
+  

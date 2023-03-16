@@ -34,23 +34,33 @@ export class TrainingListComponent implements OnInit {
 
   async onFilterChange(newFilter: TrainingFilter) {
     this.filterInfo = newFilter;
-    this.trainingListLength = await this._training.getTrainingListLength(
+    const trainingListLength = await this._training.getTrainingListLength(
       this.filterInfo.minDate ?? null,
       this.filterInfo.maxDate ?? null,
       this.filterInfo.applicants ?? null
     );
+    if(typeof trainingListLength === 'string') {
+      console.error(trainingListLength);
+    } else {
+      this.trainingListLength =  trainingListLength;
+    }
     this.pageNumber = 0;
     await this.refreshList();
   }
 
   async refreshList() {
-    this.trainingList = await this._training.getTrainingList(
+    const trainingList = await this._training.getTrainingList(
       this.filterInfo.minDate ?? null,
       this.filterInfo.maxDate ?? null,
       this.filterInfo.applicants ?? null,
       this.pageSize,
       this.pageNumber
     );
+    if (typeof trainingList === 'string') {
+      console.error(trainingList);
+    } else {
+      this.trainingList = trainingList;
+    }
   }
 
   onPaginatorChange(e: PageEvent) {

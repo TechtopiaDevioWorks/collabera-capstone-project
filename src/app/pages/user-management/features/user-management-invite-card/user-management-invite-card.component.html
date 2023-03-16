@@ -1,78 +1,67 @@
-<h1 mat-dialog-title>Confirm delete</h1>
-<div mat-dialog-content>
-    <div class="container m-auto p-2">
-        <form [formGroup]="inviteForm">
-            <!--Email-->
-            <div class="field">
-                <label class="label">Email</label>
-                <div class="control">
-                    <input
-                        class="input"
-                        type="email"
-                        placeholder="john.doe@company.com"
-                        formControlName="email"
-                        [class.is-danger]="this.inviteForm.get('email')?.errors && !this.inviteForm.get('email')?.pristine" />
-                </div>
-                <p
-                    class="help is-danger"
-                    *ngIf="!this.inviteForm.get('email')?.pristine && this.inviteForm.get('email')?.hasError('required')">
-                    Email is required.
-                </p>
-                <p
-                    class="help is-danger"
-                    *ngIf="!this.inviteForm.get('email')?.pristine && this.inviteForm.get('email')?.hasError('email')">
-                    Email is invalid.
-                </p>
+<div class="card" *ngIf="invite">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-6">Invite {{ invite.id }}</p>
+          
+          <div class="is-flex">
+            <div class="w-25">
+              <p class="subtitle is-6 m-0">Email:</p>
             </div>
-            <!--Role-->
-            <div class="field">
-                <label class="label">Role</label>
-                <div class="control">
-                    <div class="select">
-                        <select formControlName="role">
-                            <option *ngFor="let item of roleList" [ngValue]="item.id">{{ item.name }}</option>
-                        </select>
-                    </div>
-                </div>
-                <p
-                    class="help is-danger"
-                    *ngIf="!this.inviteForm.get('role')?.pristine && this.inviteForm.get('role')?.hasError('required')">
-                    Role is required.
-                </p>
-            </div>
-            <!--Team-->
-            <div class="field">
-                <label class="label">Team</label>
-                <div class="control">
-                    <div class="select">
-                        <select formControlName="team">
-                            <option *ngFor="let item of teamList" [ngValue]="item.id">{{ item.name }}</option>
-                        </select>
-                    </div>
-                </div>
-                <p
-                    class="help is-danger"
-                    *ngIf="!this.inviteForm.get('team')?.pristine && this.inviteForm.get('team')?.hasError('requiredNotHr')">
-                    Team is required for non HR roles.
-                </p>
-            </div>
-            <p class="help is-danger" *ngIf="requestError">
-                {{ requestError }}
+            <div class="w-75 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ invite.email }}</strong>
               </p>
-        </form>
-    </div>    
-</div>
-<div mat-dialog-actions>
-  <button class="button is-link m-auto" mat-dialog-close>Cancel</button>
-
-  <button
-    class="button is-primary m-auto"
-    [class.is-loading]="requestLoading"
-    [disabled]="
-			this.inviteForm.pristine || this.inviteForm.invalid
-		"
-    (click)="onSubmitClick()"
-  >
-    Invite
-  </button>
-</div>
+            </div>
+          </div>
+          <div class="is-flex">
+            <div class="w-50">
+              <p class="subtitle is-6 m-0">User created:</p>
+            </div>
+            <div class="w-50 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ invite.user_created ? 'True' : 'False' }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex">
+            <div class="w-35">
+              <p class="subtitle is-6 m-0">Role:</p>
+            </div>
+            <div class="w-65 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ invite.role.name }}</strong>
+              </p>
+            </div>
+          </div>
+  
+          <div class="is-flex" *ngIf="invite.team">
+            <div class="w-25">
+              <p class="subtitle is-6 m-0">Team:</p>
+            </div>
+            <div class="w-75 has-text-centered">
+              <p class="subtitle is-6 m-0">
+                <strong>{{ invite.team.name }}</strong>
+              </p>
+            </div>
+          </div>
+          <div class="is-flex is-flex-direction-column mt-1" *ngIf="invite.token">
+            <div class="w-100 has-text-centered">
+              <p class="title is-6 m-0">Token</p>
+            </div>
+            <div class="w-100 has-text-centered">
+                <div class="field">
+                    <div class="control">
+                      <textarea class="textarea is-small has-fixed-size" readonly>{{invite.token}}</textarea>
+                    </div>
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+        <a class="card-footer-item" (click)="onDeleteClick()"  [class.is-loading]="requestLoading">Delete</a>
+    </footer>
+  </div>
+  
