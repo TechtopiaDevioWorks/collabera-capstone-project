@@ -23,8 +23,5 @@ export class UserManagementCardComponent implements OnInit {
       }
     })
   }
-  
-  onTrainingHistoryClick() {
-    if(this.user?.role.id !== 1) return;
-  }
+
 }

@@ -6,6 +6,7 @@ import { User } from '@core/interfaces/user';
 import { FeedbackService } from '@core/services/feedback.service';
 import { TrainingService } from '@core/services/training.service';
 import { FeedbackDialogComponent } from '@shared/feedback-dialog/feedback-dialog.component';
+import { TrainingAttendanceDialogComponent } from '@shared/training-attendance-dialog/training-attendance-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 import { TrainingRegistrationDeleteDialogComponent } from '../training-registration-delete-dialog/training-registration-delete-dialog.component';
@@ -163,4 +164,14 @@ export class TrainingAppliantCardComponent implements OnInit {
       });
     }
   }
+
+  async onViewAttendances() {
+    if (!this.appliance) return;
+      this.dialog.open(TrainingAttendanceDialogComponent, {
+        data: {
+          training_id: this.appliance.training.id,
+          user_id: this.appliance.user.id
+        },
+      });
+    }
 }

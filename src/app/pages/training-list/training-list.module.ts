@@ -10,6 +10,8 @@ import { CoreModule } from '@core/core.module';
 import { TrainingDeleteDialogComponent } from './features/training-delete-dialog/training-delete-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TrainingApplyDialogComponent } from './features/training-apply-dialog/training-apply-dialog.component';
+import { TrainingAddAttendanceDialogComponent } from './features/training-add-attendance-dialog/training-add-attendance-dialog.component';
+import {NgxMatTimepickerModule} from 'ngx-mat-timepicker';  
 
 @NgModule({
   declarations: [
@@ -18,14 +20,17 @@ import { TrainingApplyDialogComponent } from './features/training-apply-dialog/t
     TrainingCardComponent,
     TrainingDeleteDialogComponent,
     TrainingApplyDialogComponent,
+    TrainingAddAttendanceDialogComponent,
   ],
   imports: [
     CommonModule,
     TrainingListRoutingModule,
     MatPaginatorModule,
     CoreModule,
-    MatDialogModule
+    MatDialogModule,
+    NgxMatTimepickerModule
   ],
   providers: [MatDialog],
+  exports: [TrainingCardComponent]
 })
 export class TrainingListModule {}

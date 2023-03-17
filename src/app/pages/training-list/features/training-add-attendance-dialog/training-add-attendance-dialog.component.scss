@@ -1,0 +1,25 @@
+.card {
+    max-width: 600px;
+}
+.control {
+    display: flex;
+}
+.select {
+    width: 100%;
+    select {
+        width: 100%;
+    }
+}
+
+.datepicker-icon {
+    color: hsl(0, 0%, 86%);
+    height: 2.5em;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 2.5em;
+    z-index: 4;
+}
+.datepicker-range {
+    padding-left: 2.5em;
+}

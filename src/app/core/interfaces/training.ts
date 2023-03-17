@@ -56,3 +56,15 @@ export interface TrainingRegistrationMin {
   user_id: number;
   registration_date: Moment;
 }
+
+export interface TrainingAttendance {
+  id: number;
+  training_id: number;
+  user_id: number;
+  status_id: number;
+  start: Moment;
+  end: Moment;
+  status: Status;
+  training: MinTraining;
+  user: MinUser;
+}

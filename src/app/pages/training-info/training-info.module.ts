@@ -8,6 +8,7 @@ import { TrainingAppliantCardComponent } from './features/training-appliant-card
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { TrainingRegistrationDeleteDialogComponent } from './features/training-registration-delete-dialog/training-registration-delete-dialog.component';
 import { FeedbackDialogModule } from '@shared/feedback-dialog/feedback-dialog.module';
+import { TrainingAttendanceDialogModule } from '@shared/training-attendance-dialog/training-attendance-dialog.module';
 
 
 @NgModule({
@@ -21,8 +22,9 @@ import { FeedbackDialogModule } from '@shared/feedback-dialog/feedback-dialog.mo
     TrainingInfoRoutingModule,
     CoreModule,
     MatDialogModule,
-    FeedbackDialogModule
+    FeedbackDialogModule,
+    TrainingAttendanceDialogModule
   ],
-  providers: [MatDialog]
+  providers: [MatDialog],
 })
 export class TrainingInfoModule { }

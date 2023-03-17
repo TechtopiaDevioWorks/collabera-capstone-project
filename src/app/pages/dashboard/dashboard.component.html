@@ -1,1 +1,93 @@
-<p>dashboard works!</p>
+<div class="tabs is-centered">
+  <ul>
+    <li style="pointer-events: none"><a>Active trainings</a></li>
+  </ul>
+</div>
+<div
+  class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around"
+>
+  <mat-paginator
+    class="w-100"
+    [length]="activeTrainingListLength"
+    [pageSize]="pageSizeActive"
+    (page)="onPaginatorActiveChange($event)"
+    [pageSizeOptions]="[3, 5, 10]"
+    aria-label="Select page"
+    *ngIf="activeTrainingListLength"
+  >
+  </mat-paginator>
+  <app-training-card
+    *ngFor="let item of activeTrainingList"
+    [training]="item"
+    [userRoleId]="userRoleId"
+    [userTrainingRegistrationList]="userTrainingRegistrationList"
+  ></app-training-card>
+  <p
+    class="help is-info"
+    *ngIf="!activeTrainingList || activeTrainingList.length === 0"
+  >
+    No active trainings.
+  </p>
+</div>
+<div class="tabs is-centered">
+  <ul>
+    <li style="pointer-events: none"><a>Recently finished trainings</a></li>
+  </ul>
+</div>
+<div
+  class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around"
+>
+  <mat-paginator
+    class="w-100"
+    [length]="recentTrainingListLength"
+    [pageSize]="pageSizeRecent"
+    (page)="onPaginatorRecentChange($event)"
+    [pageSizeOptions]="[3, 5, 10]"
+    aria-label="Select page"
+    *ngIf="recentTrainingListLength"
+  >
+  </mat-paginator>
+  <app-training-card
+    *ngFor="let item of recentTrainingList"
+    [training]="item"
+    [userRoleId]="userRoleId"
+    [userTrainingRegistrationList]="userTrainingRegistrationList"
+  ></app-training-card>
+  <p
+    class="help is-info"
+    *ngIf="!recentTrainingList || recentTrainingList.length === 0"
+  >
+    No recently finished trainings.
+  </p>
+</div>
+<div class="tabs is-centered">
+  <ul>
+    <li style="pointer-events: none"><a>Upcoming trainings</a></li>
+  </ul>
+</div>
+<div
+  class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around"
+>
+  <mat-paginator
+    class="w-100"
+    [length]="upcomingTrainingListLength"
+    [pageSize]="pageSizeUpcoming"
+    (page)="onPaginatorUpcomingChange($event)"
+    [pageSizeOptions]="[3, 5, 10]"
+    aria-label="Select page"
+    *ngIf="upcomingTrainingListLength"
+  >
+  </mat-paginator>
+  <app-training-card
+    *ngFor="let item of upcomingTrainingList"
+    [training]="item"
+    [userRoleId]="userRoleId"
+    [userTrainingRegistrationList]="userTrainingRegistrationList"
+  ></app-training-card>
+  <p
+    class="help is-info"
+    *ngIf="!upcomingTrainingList || upcomingTrainingList.length === 0"
+  >
+    No upcomings trainings.
+  </p>
+</div>

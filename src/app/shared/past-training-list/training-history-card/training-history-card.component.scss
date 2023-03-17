@@ -1,3 +1,24 @@
 .card {
     width: 300px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
 }
+.card-footer {
+    margin-top: auto;
+    .disabled {
+      pointer-events: none;
+      .card-footer-item-button {
+        opacity: 0.25;
+      }
+    }
+  
+    .span-disabled {
+      cursor: not-allowed;
+    }
+  }
+:host {
+    padding: 15px;
+}
+

@@ -50,7 +50,7 @@
   <footer class="card-footer">
     <ng-container [ngSwitch]="manager?.role?.id">
       <ng-container *ngSwitchCase="2">
-        <a class="card-footer-item" (click)="onTrainingHistoryClick()" [class.disabled]="user.role.id !== 1">Training history</a>
+        <a class="card-footer-item" [routerLink]="user.role.id === 1 ? ['history', user.id] : []" [class.disabled]="user.role.id !== 1">Training history</a>
       </ng-container>
       <ng-container *ngSwitchCase="3">
         <a class="card-footer-item" [routerLink]="user.role.id === 1 ? ['history', user.id] : []" [class.disabled]="user.role.id !== 1">Training history</a>

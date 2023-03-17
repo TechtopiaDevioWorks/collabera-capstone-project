@@ -41,8 +41,9 @@
         <a
           class="card-footer-item"
           (click)="onApplyClick()"
+          [class.disabled]="training.startDate.isSameOrBefore(currentDate, 'd')"
           *ngIf="!userTrainingRegistration"
-          >Apply</a
+          > <span class="card-footer-item-button">Apply</span></a
         >
         <ng-container *ngIf="userTrainingRegistration">
           <a
@@ -70,7 +71,7 @@
             </span></a
           >
           <ng-container *ngIf="userTrainingRegistration.status.id === 3">
-            <a class="card-footer-item" (click)="onAddAttendance()" [class.disabled]="!training.startDate.isSameOrBefore(currentDate, 'd')">
+            <a class="card-footer-item" (click)="onAddAttendance()" [class.disabled]="!training.startDate.isSameOrBefore(currentDate, 'd') || training.endDate.isBefore(currentDate, 'd')">
               <span>
                 <span
                   title="Badge top center"
@@ -95,7 +96,7 @@
         <a
           class="card-footer-item"
           [routerLink]="['/training-info', training.id]"
-          [class.disabled]="!training.noapplicants"
+          
         >
           <span
             title="Badge top center"

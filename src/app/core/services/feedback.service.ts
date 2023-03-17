@@ -80,6 +80,9 @@ export class FeedbackService {
         errorMessage = `An error occurred: ${error.error}`;
       } else {
         if (error.error?.message) return error.error.message;
+        if (error.error?.errors) return JSON.stringify(error.error?.errors).replace(/[{()}[\]"]/g,'').replace(/(^|\s)\w+(?=:)/g, function(match) {
+          return match.charAt(0).toUpperCase() + match.slice(1)
+        }).replaceAll(':', ': ');
         errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
       }
     }

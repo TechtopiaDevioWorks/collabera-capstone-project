@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MinTraining, Training, TrainingRegistrationMax } from '@core/interfaces/training';
 import { FeedbackService } from '@core/services/feedback.service';
+import { TrainingService } from '@core/services/training.service';
 import { TrainingRegistrationDeleteDialogComponent } from '@pages/training-info/features/training-registration-delete-dialog/training-registration-delete-dialog.component';
 import { FeedbackDialogComponent } from '@shared/feedback-dialog/feedback-dialog.component';
 import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
+import { TrainingAddAttendanceDialogComponent } from '../training-add-attendance-dialog/training-add-attendance-dialog.component';
 import { TrainingApplyDialogComponent } from '../training-apply-dialog/training-apply-dialog.component';
 import { TrainingDeleteDialogComponent } from '../training-delete-dialog/training-delete-dialog.component';
 
@@ -23,7 +25,7 @@ export class TrainingCardComponent implements OnInit{
   expired = false;
   userTrainingRegistration: TrainingRegistrationMax | null | undefined = null;
   currentDate = moment();
-  constructor(private dialog: MatDialog, private _feedback: FeedbackService, private _toast: ToastrService) {
+  constructor(private dialog: MatDialog, private _feedback: FeedbackService, private _toast: ToastrService, private _training: TrainingService) {
 
   }
   ngOnInit(): void {
@@ -32,7 +34,7 @@ export class TrainingCardComponent implements OnInit{
   }
 
   checkExpired() {
-    const currentMoment = moment.utc().add(-1, 'd')
+    const currentMoment = moment.utc().add(-15, 'd')
     if(this.training?.endDate.isBefore(currentMoment)) {
       this.expired = true;
     }
@@ -99,7 +101,32 @@ export class TrainingCardComponent implements OnInit{
   }
 
   async onAddAttendance() {
-
+    if(!this.training) return false;
+    const res = await firstValueFrom(
+      this.dialog.open(TrainingAddAttendanceDialogComponent, {
+      })
+        .afterClosed()
+    );
+    if (res!==false) {
+      if(res.start && res.end) {
+        const startTime = res.start.split(':');
+        const endTime = res.end.split(':');
+        const resStartDate = moment().set('h', startTime[0]).set('minute', startTime[1]).utc(true)
+        const resEndDate = moment().set('h', endTime[0]).set('minute', endTime[1]).utc(true)
+        const resAtt = await this._training.addAttendance(
+          this.training.id,
+          resStartDate.toISOString(),
+          resEndDate.toISOString()
+        );
+        if (typeof resAtt === 'string') {
+          this._toast.warning(`Error! ${resAtt}`);
+          return false;
+        }
+        this._toast.success(`Attendance submitted!`);
+        return true
+      }
+    }
+    return false
   }
 
   async onViewReason() {

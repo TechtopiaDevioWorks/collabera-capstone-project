@@ -4,6 +4,7 @@ import { PastTrainingListComponent } from './past-training-list.component';
 import { CoreModule } from '@core/core.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { TrainingHistoryCardComponent } from './training-history-card/training-history-card.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -15,8 +16,10 @@ import { TrainingHistoryCardComponent } from './training-history-card/training-h
   imports: [
     CommonModule,
     MatPaginatorModule,
-    CoreModule
+    CoreModule,
+    MatDialogModule
   ],
-  exports: [PastTrainingListComponent]
+  exports: [PastTrainingListComponent],
+  providers: [MatDialog]
 })
 export class PastTrainingListModule { }

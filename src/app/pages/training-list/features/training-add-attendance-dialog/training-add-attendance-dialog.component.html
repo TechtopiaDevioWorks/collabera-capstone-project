@@ -1,0 +1,60 @@
+<h1 mat-dialog-title>Add attendance</h1>
+<div mat-dialog-content>
+  <h6 class="title is-6">Please confirm your training application</h6>
+  <div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+            <form [formGroup]="attendanceForm">
+                <!--start-->
+                <div class="field">
+                    <label class="label">Start of attendance</label>
+                    <div class="control">
+                        <input class="input datepicker-range" matInput [format]="24" formControlName="start" placeholder="00:00" [ngxMatTimepicker]="pickerA" readonly>
+                        <span class="datepicker-icon icon is-small is-left">
+                            <i class="fas fa-clock" (click)="pickerA.open()"></i>
+                            <ngx-mat-timepicker color="accent"
+                            #pickerA></ngx-mat-timepicker>
+                        </span>
+                    </div>
+                    <p
+                    class="help is-danger"
+                    *ngIf="!this.attendanceForm.get('start')?.pristine && this.attendanceForm.get('start')?.hasError('required')">
+                    Start of attendance is required.
+                </p>
+                </div>
+                <!--end-->
+                <div class="field">
+                    <label class="label">End of attendance</label>
+                    <div class="control">
+                        <input class="input datepicker-range" matInput [min]="minTime"
+                        [format]="24" formControlName="end" placeholder="00:00" [ngxMatTimepicker]="pickerB" readonly>
+                        <span class="datepicker-icon icon is-small is-left">
+                            <i class="fas fa-clock" (click)="pickerB.open()"></i>
+                            <ngx-mat-timepicker color="accent"
+                            #pickerB></ngx-mat-timepicker>
+                        </span>
+                    </div>
+                    <p
+                    class="help is-danger"
+                    *ngIf="!this.attendanceForm.get('end')?.pristine && this.attendanceForm.get('end')?.hasError('required')">
+                    End of attendance is required.
+                </p>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" [mat-dialog-close]="false">Cancel</button>
+
+  <button
+    class="button is-primary m-auto"
+    (click)="onConfirmClick()"
+    [disabled]="!attendanceForm.valid || this.attendanceForm.pristine"
+  >
+    Confirm
+  </button>
+</div>

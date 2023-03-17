@@ -272,7 +272,7 @@ export class UserService {
       const res = await firstValueFrom(
         this._http.get<any[]>(
           environment.apiUrl +
-            `/training-history${userid === this._user?.id ? '' : `/${userid}`}`
+            `/training-history${userid === this._user?.id ? '' : `/${userid}`}?$orderby=registration_date`
         )
       );
       if (res) {
@@ -383,7 +383,6 @@ export class UserService {
       return this.handleError(e);
     }
   }
-
   private handleError(error: HttpErrorResponse | unknown): string {
     let errorMessage = 'Unexpected error occured. Try again!';
     if (error instanceof HttpErrorResponse) {
@@ -391,6 +390,9 @@ export class UserService {
         errorMessage = `An error occurred: ${error.error}`;
       } else {
         if (error.error?.message) return error.error.message;
+        if (error.error?.errors) return JSON.stringify(error.error?.errors).replace(/[{()}[\]"]/g,'').replace(/(^|\s)\w+(?=:)/g, function(match) {
+          return match.charAt(0).toUpperCase() + match.slice(1)
+        }).replaceAll(':', ': ');
         errorMessage = `Backend returned code ${error.status}, body was: ${error.error}`;
       }
     }
@@ -398,7 +400,5 @@ export class UserService {
     return errorMessage;
   }
 
-  private delay(ms: number) {
-    return new Promise((res) => setTimeout(res, ms));
-  }
+
 }

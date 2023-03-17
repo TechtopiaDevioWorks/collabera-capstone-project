@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Training Attendances</h1>
+<div mat-dialog-content>
+  <p class="subtitle is-6" *ngIf="subtitle">{{ subtitle }}</p>
+  <div class="container m-auto p-2">
+    <table class="table" *ngIf="attendanceList">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Training</th>
+          <th>Start</th>
+          <th>End</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of attendanceList">
+          <td>{{item.user.firstname}} {{item.user.lastname}} ({{item.user.username}})</td>
+          <td>{{item.training.title}}</td>
+          <td>{{item.start.format("DD/MM/YYYY HH:mm")}}</td>
+          <td>{{item.end.format("DD/MM/YYYY HH:mm")}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button class="button is-link m-auto" mat-dialog-close>Close</button>
+</div>
