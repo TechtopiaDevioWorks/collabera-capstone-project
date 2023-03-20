@@ -27,7 +27,7 @@ export class TrainingDeleteDialogComponent {
     if (this.data.training) {
       const deleteStatus = await this._training.delete(this.data.training.id);
       if (deleteStatus === true) {
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       } else {
         this.requestError = `Delete Failed! ${deleteStatus}`;
       }

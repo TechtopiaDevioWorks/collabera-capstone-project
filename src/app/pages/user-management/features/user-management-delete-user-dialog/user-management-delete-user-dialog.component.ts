@@ -29,7 +29,7 @@ export class UserManagementDeleteUserDialogComponent {
     if (this.data.user) {
       const deleteStatus = await this._user.delete(this.data.user.id);
       if (deleteStatus === true) {
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       } else {
         this.requestError = `Delete Failed! ${deleteStatus}`;
       }

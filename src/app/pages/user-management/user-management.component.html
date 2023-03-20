@@ -31,7 +31,7 @@
 	<div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around">
         <ng-container *ngIf="selectedTab==='Users'">
 			<ng-container *ngFor="let item of userList">
-				<app-user-management-card [user]="item" [manager]="currentUser"></app-user-management-card>
+				<app-user-management-card [user]="item" [manager]="currentUser" (refreshRequired)="refreshList('Users')"></app-user-management-card>
 			</ng-container>
 		</ng-container>
 		<ng-container *ngIf="selectedTab==='Invites'">

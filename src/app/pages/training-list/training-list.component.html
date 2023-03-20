@@ -17,6 +17,6 @@
 		aria-label="Select page">
 	</mat-paginator>
 	<div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-space-around">
-		<app-training-card *ngFor="let item of trainingList" [training]="item" [userRoleId]="userRoleId" [userTrainingRegistrationList]="userTrainingRegistrationList"></app-training-card>
+		<app-training-card *ngFor="let item of trainingList" [training]="item" [userRoleId]="userRoleId" [userTrainingRegistrationList]="userTrainingRegistrationList" (refreshRequired)="fullRefresh()"></app-training-card>
 	</div>
 </div>

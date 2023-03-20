@@ -21,6 +21,7 @@
     [training]="item"
     [userRoleId]="userRoleId"
     [userTrainingRegistrationList]="userTrainingRegistrationList"
+    (refreshRequired)="trainingRefreshed('active')"
   ></app-training-card>
   <p
     class="help is-info"
@@ -52,6 +53,7 @@
     [training]="item"
     [userRoleId]="userRoleId"
     [userTrainingRegistrationList]="userTrainingRegistrationList"
+    (refreshRequired)="trainingRefreshed('recent')"
   ></app-training-card>
   <p
     class="help is-info"
@@ -83,6 +85,7 @@
     [training]="item"
     [userRoleId]="userRoleId"
     [userTrainingRegistrationList]="userTrainingRegistrationList"
+    (refreshRequired)="trainingRefreshed('upcoming')"
   ></app-training-card>
   <p
     class="help is-info"

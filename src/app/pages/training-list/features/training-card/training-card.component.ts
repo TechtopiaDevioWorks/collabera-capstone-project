@@ -25,6 +25,7 @@ export class TrainingCardComponent implements OnInit{
   expired = false;
   userTrainingRegistration: TrainingRegistrationMax | null | undefined = null;
   currentDate = moment();
+  @Output() refreshRequired: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private dialog: MatDialog, private _feedback: FeedbackService, private _toast: ToastrService, private _training: TrainingService) {
 
   }
@@ -40,20 +41,32 @@ export class TrainingCardComponent implements OnInit{
     }
   }
 
-  onDeleteClick() {
-    this.dialog.open(TrainingDeleteDialogComponent, {
-      data: {
-        training: this.training
-      }
-    })
+  async onDeleteClick() {
+    const res = await firstValueFrom(
+      this.dialog.open(TrainingDeleteDialogComponent, {
+        data: {
+          training: this.training
+        }
+      })
+        .afterClosed()
+    );
+    if (res===true) {
+      this.refreshRequired.next(true);
+    }
   }
 
-  onApplyClick() {
-    this.dialog.open(TrainingApplyDialogComponent, {
-      data: {
-        training: this.training
-      }
-    })
+  async onApplyClick() {
+    const res = await firstValueFrom(
+      this.dialog.open(TrainingApplyDialogComponent, {
+        data: {
+          training: this.training
+        }
+      })
+        .afterClosed()
+    );
+    if (res===true) {
+      this.refreshRequired.next(true);
+    }
   }
 
   async onDeleteRegistration() {

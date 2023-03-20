@@ -48,16 +48,7 @@ export class TrainingListComponent implements OnInit {
 
   async onFilterChange(newFilter: TrainingFilter) {
     this.filterInfo = newFilter;
-    const trainingListLength = await this._training.getTrainingListLength(
-      this.filterInfo.minDate ?? null,
-      this.filterInfo.maxDate ?? null,
-      this.filterInfo.applicants ?? null
-    );
-    if(typeof trainingListLength === 'string') {
-      console.error(trainingListLength);
-    } else {
-      this.trainingListLength =  trainingListLength;
-    }
+    await this.refreshListLength();
     this.pageNumber = 0;
     await this.refreshList();
   }
@@ -76,6 +67,25 @@ export class TrainingListComponent implements OnInit {
       this.trainingList = trainingList;
     }
   }
+
+  async refreshListLength() {
+    const trainingListLength = await this._training.getTrainingListLength(
+      this.filterInfo.minDate ?? null,
+      this.filterInfo.maxDate ?? null,
+      this.filterInfo.applicants ?? null
+    );
+    if(typeof trainingListLength === 'string') {
+      console.error(trainingListLength);
+    } else {
+      this.trainingListLength =  trainingListLength;
+    }
+  }
+
+  async fullRefresh() {
+    this.refreshListLength();
+    this.refreshList();
+  }
+
 
   onPaginatorChange(e: PageEvent) {
     this.pageNumber = e.pageIndex;

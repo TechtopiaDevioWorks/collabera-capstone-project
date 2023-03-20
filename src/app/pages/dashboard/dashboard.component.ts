@@ -73,6 +73,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.refreshList();
     }
   }
+
+  async trainingRefreshed(list: 'active'|'recent'|'upcoming') {
+    switch (list) {
+      case 'active':
+        this.refreshActiveTrainingListLength();
+        this.refreshActiveTrainingList();
+        break;
+      case 'recent':
+        this.refreshRecentTrainingListLength();
+        this.refreshRecentTrainingList();
+        break;
+      case 'upcoming':
+        this.refreshUpcomingTrainingListLength();
+        this.refreshUpcomingTrainingList();
+        break;
+    }
+  }
   
   async refreshAllListLength() {
     this.refreshActiveTrainingListLength();

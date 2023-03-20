@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MinUser } from '@core/interfaces/user';
 import { MatDialog } from '@angular/material/dialog';
 import { UserManagementDeleteUserDialogComponent } from '../user-management-delete-user-dialog/user-management-delete-user-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-user-management-card',
@@ -11,17 +12,24 @@ import { UserManagementDeleteUserDialogComponent } from '../user-management-dele
 export class UserManagementCardComponent implements OnInit {
   @Input() user: MinUser | null = null;
   @Input() manager: MinUser | null = null;
+  @Output() refreshRequired: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
-  onDeleteClick() {
+  async onDeleteClick() {
     if(this.user?.id === this.manager?.id) return;
-    this.dialog.open(UserManagementDeleteUserDialogComponent, {
-      data: {
-        user: this.user
-      }
-    })
+    const res = await firstValueFrom(
+      this.dialog.open(UserManagementDeleteUserDialogComponent, {
+        data: {
+          user: this.user
+        }
+      })
+        .afterClosed()
+    );
+    if (res===true) {
+      this.refreshRequired.next(true);
+    }
   }
 
 }

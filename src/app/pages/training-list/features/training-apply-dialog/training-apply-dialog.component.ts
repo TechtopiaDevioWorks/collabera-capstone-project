@@ -29,7 +29,7 @@ export class TrainingApplyDialogComponent {
     if (this.data.training) {
       const applyStatus = await this._training.apply(this.data.training.id);
       if (applyStatus === true) {
-        this.dialogRef.close();
+        this.dialogRef.close(true);
         this._router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this._router.navigate(['/trainings']);
       });
